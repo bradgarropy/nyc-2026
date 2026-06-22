@@ -20,9 +20,12 @@ shop — not a Google Maps timeline.
 - Clicking a stop opens a detail panel: photos, notes, restaurants, subway lines
   used, and funny memories.
 - A **day filter** (All / Day 1–4) highlights one line and dims the rest.
-- **Arrival & departure** are drawn as subtle **dotted tails** off the Hotel hub:
-  in via the **Lincoln Tunnel** (from NJ), out to **LGA**. Neither is in the day
-  filter.
+- The trip was **5 days / 4 nights**. The drive in through the **Lincoln Tunnel**
+  is the start of **Day 1** (not a separate day); **Day 5** is the departure to
+  **LGA**, a travel-only day excluded from the filter.
+- **Transit modes have distinct line styles** so it's easy to tell how we got
+  between stops: walk (dotted), subway (solid), ferry (dashed), car (dash-dot).
+  The car style covers the Lincoln Tunnel arrival and LGA departure.
 - v1 is a **static, fit-to-screen poster** with clickable stops. Pan/zoom and a
   line draw-on animation are planned later (see Future enhancements).
 
@@ -45,17 +48,16 @@ shop — not a Google Maps timeline.
 Classification legend: ⭐ major · 🍴 food · • standard · `[mode]` = transit
 between stops · `hub` = recurring transfer station.
 
-### Arrival — Lincoln Tunnel (not a mapped line)
-
-Drove in from NJ through the **Lincoln Tunnel** → Hotel. Rendered as a subtle
-**dotted "arrival" tail** into the Hotel hub (mirrors the Day 5 departure);
-excluded from the day filter.
-
 ### Day 1 — Tue, Jun 16 · Midtown / Times Square · 🔴 line
 
-Hotel (hub) → Times Square ⭐ → LEGO Store → Nintendo Store (hub) →
-Rockefeller Center (hub) ⭐ → FAO Schwarz → St. Patrick's Cathedral (outside) →
-Grand Central Terminal ⭐ → Grand Central Hot Dog Cart 🍴🌭 → Hotel (hub)
+Lincoln Tunnel 🚗 → `[car]` → Hotel (hub) → Times Square ⭐ → LEGO Store →
+Nintendo Store (hub) → Rockefeller Center (hub) ⭐ → FAO Schwarz →
+St. Patrick's Cathedral (outside) → Grand Central Terminal ⭐ →
+Grand Central Hot Dog Cart 🍴🌭 → Hotel (hub)
+
+_(The day opens with the drive in through the Lincoln Tunnel — that first `car`
+segment is dash-dot styled, but it's part of the red Day 1 line, not a separate
+day.)_
 
 ### Day 2 — Wed, Jun 17 · Downtown + Brooklyn · 🔵 line (rode the E)
 
@@ -79,11 +81,11 @@ Pop Mart → Hotel (hub) → Pizza Suprema 🍴🍕
 
 _(Friends Apartment was on the original list but we skipped it — omitted.)_
 
-### Day 5 — Sat, Jun 20 · travel home (not a mapped line)
+### Day 5 — Sat, Jun 20 · Departure — LGA · ⚪ travel
 
-Hotel → Uber → LGA ✈ → Houston → Austin.
-Rendered as a subtle **dotted "departure" tail** off the Hotel hub (mirrors the
-Lincoln Tunnel arrival); excluded from the day filter.
+Hotel → `[car]` → LGA ✈ → Houston → Austin.
+A **travel-only day** (`travel: true`): drawn as a grey dash-dot car line off the
+Hotel hub, but excluded from the day filter. (Houston/Austin are off-map.)
 
 ### recurring transfer hubs
 
@@ -117,7 +119,7 @@ generated utilities (`bg-mta-red`, `text-mta-blue`, …) and CSS vars
 | 2   | Downtown + Brooklyn         | `--color-mta-blue`   | `#0039A6` | A·C·**E** blue |
 | 3   | Central Park + Midtown/SoHo | `--color-mta-green`  | `#00933C` | 4·5·6 green    |
 | 4   | West Side + Chinatown       | `--color-mta-orange` | `#FF6319` | B·D·F·M orange |
-| 5   | departure (dotted)          | `--color-mta-grey`   | `#A7A9AC` | grey, dashed   |
+| 5   | departure (travel)          | `--color-mta-grey`   | `#A7A9AC` | grey, car      |
 
 The full palette (yellow, light-green, brown, purple, shuttle, teal) is also
 defined for the optional subway-lines layer.
@@ -129,8 +131,11 @@ defined for the optional subway-lines layer.
 
 ## 5. data model
 
+Types live in `src/data/types.ts`; the data is split across `src/data/stops.ts`,
+`src/data/days.ts`, and `src/data/trip.ts` (which composes them).
+
 ```ts
-// src/data/trip.ts
+// src/data/types.ts
 type StopCategory = "major" | "food" | "standard"
 type TransitMode = "subway" | "walk" | "ferry" | "car"
 
@@ -150,7 +155,7 @@ type Stop = {
 }
 
 type Segment = {
-    mode: TransitMode
+    mode: TransitMode // drives the line style (see MODE_DASH)
     line?: string // "E" when mode === "subway"
 }
 
@@ -158,10 +163,10 @@ type Day = {
     id: number
     date: string // "Tue, Jun 16"
     theme: string
-    color: string // hex
+    color: string // CSS var, e.g. "var(--color-mta-red)"
     route: string[] // ordered Stop ids
     segments: Segment[] // route.length - 1 entries, mode between stops
-    dashed?: boolean // true for Day 5 departure tail
+    travel?: boolean // travel-only day (Day 5 → LGA); excluded from filter
 }
 
 type Trip = {days: Day[]; stops: Record<string, Stop>}
@@ -170,9 +175,12 @@ type Trip = {days: Day[]; stops: Record<string, Stop>}
 - Stops live in a keyed map so hubs are defined once and referenced by every day.
 - Each `Day.route` is an ordered list of stop ids; `segments[i]` is the
   transit mode used between `route[i]` and `route[i+1]`.
-- **Arrival (Lincoln Tunnel) and departure (LGA)** are modeled as `dashed: true`
-  entries that connect their anchor to the Hotel hub. They render as dotted tails
-  and are filtered out of the day toggle.
+- **Line style is driven by `mode`** (`MODE_DASH` in `src/utils/trip.ts`):
+  walk = dotted, subway = solid, ferry = dashed, car = dash-dot.
+- **Arrival** is the leading `car` segment of **Day 1** (Lincoln Tunnel → Hotel);
+  **departure** is **Day 5** (`travel: true`, Hotel → LGA, `car`). Both render
+  dash-dot via the car style. `filterableDays()` (in `src/utils/trip.ts`) hides
+  travel-only days from the toggle.
 - **Notes/memories** are seeded from the trip brain-dump where we have them
   (e.g. the Grand Central hot dog cart, Washington Square Park); every other stop
   gets lorem-ipsum placeholder text to be replaced later.
@@ -189,7 +197,7 @@ type Trip = {days: Day[]; stops: Record<string, Stop>}
     - top: Central Park / Zoo, Upper East & West Side
     - upper-mid: Times Sq, Rockefeller, Fifth Ave, Grand Central, **Hotel hub**
     - west (left): Hudson Yards, Vessel, High Line, Chelsea Market, Little Island,
-      Pier 79, **Lincoln Tunnel** (far-west midtown, ~42nd St — arrival tail)
+      Pier 79, **Lincoln Tunnel** (far-west midtown, ~42nd St — Day 1 arrival)
     - lower-mid: Washington Sq, SoHo, 368 Broadway
     - bottom: Chinatown (Pell/Doyers/Mott), FiDi, WTC/Oculus, Wall St/NYSE, Statue of Liberty
     - lower-right (Brooklyn): Brooklyn Bridge, DUMBO, Jane's Carousel, Westville, Pebble Beach
@@ -203,13 +211,16 @@ type Trip = {days: Day[]; stops: Record<string, Stop>}
 ## 7. rendering
 
 - `<TripMap>` — the SVG canvas (viewBox, optional pan/zoom later).
-    - `<DayLine day={...}>` — one colored polyline per day, 45° routing, rounded
-      caps/joins; dashed when `day.dashed`.
+    - `<DayLine day={...}>` — the day's colored route, 45° routing, rounded
+      caps/joins. Drawn segment-by-segment so each segment's **stroke style comes
+      from its `mode`** (`MODE_DASH`): walk dotted, subway solid, ferry dashed,
+      car dash-dot. Use round line caps so the dotted walk reads as dots.
     - `<StopNode stop={...}>` — white bulb with colored ring. Hubs render larger
       with multiple colored rings (one per day passing through). Food/major stops
       get an emoji/badge.
     - `<StopLabel>` — MTA-style label beside each dot, collision-avoided where easy.
 - Render order: lines first (so dots sit on top), then nodes, then labels.
+- A small **legend** also documents the four mode line styles.
 
 ---
 
@@ -266,8 +277,12 @@ src/
     Legend/
     StopPanel/           # detail drawer / bottom sheet
   data/
-    trip.ts              # all days, stops, segments, colors
+    types.ts             # shared types (Stop, Segment, Day, Trip)
+    stops.ts             # the stops map (coords, days, notes, ...)
+    days.ts              # the day routes + segments
+    trip.ts              # composes stops + days into Trip
   utils/
+    trip.ts              # filterableDays(), MODE_DASH
     path.ts              # 45° SVG path helper
   styles/
     tailwind.css
@@ -282,8 +297,9 @@ public/
 
 ## 12. build phases
 
-1. **Data** — author `src/data/trip.ts`: every stop with first-pass coords,
-   days, categories, hubs, memories, placeholder photo paths.
+1. **Data** — author `src/data/{types,stops,days,trip}.ts`: every stop with
+   first-pass coords, days, categories, hubs, memories, placeholder photo paths.
+   _(done)_
 2. **Static map** — `<TripMap>` + `<DayLine>` + `<StopNode>` + `<StopLabel>`
    rendering all days at once. Nail the 45° path helper.
 3. **Coordinate pass** — render, screenshot, nudge coordinates until it reads
@@ -309,8 +325,10 @@ public/
 ## 14. decisions locked in
 
 - **Portrait** canvas, north up; Brooklyn kept compact (no need to show all of it).
-- **Arrival** = dotted Lincoln Tunnel tail; **Day 5** = dotted LGA departure tail.
-  Both hang off the Hotel hub and are excluded from the day filter.
+- Trip is **5 days / 4 nights**: the **Lincoln Tunnel arrival is the start of
+  Day 1**; **Day 5** is the LGA departure (`travel: true`, excluded from filter).
+- **Transit mode drives line style**: walk dotted, subway solid, ferry dashed,
+  car dash-dot (car = arrival + departure drives).
 - Recurring stops = transfer hubs (single node, multiple colored lines).
 - Pizza Suprema → Penn/MSG/Hotel area; Cloudflare Office → WTC; 368 Broadway → SoHo;
   Friends Apartment skipped.
