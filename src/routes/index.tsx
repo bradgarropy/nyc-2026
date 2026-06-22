@@ -1,8 +1,19 @@
+import DayLine from "~/components/DayLine"
+import TripMap from "~/components/TripMap"
+import {trip} from "~/data/trip"
+
 const Route = () => {
+    const {days, stops} = trip
+
     return (
         <>
             <title>🗽 nyc 2026 | home</title>
-            <h2 className="text-2xl font-bold">Home</h2>
+
+            <TripMap>
+                {days.map(day => (
+                    <DayLine key={day.id} day={day} stops={stops} />
+                ))}
+            </TripMap>
         </>
     )
 }
