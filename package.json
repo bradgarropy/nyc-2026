@@ -11,9 +11,9 @@
         "vitest",
         "cloudflare",
         "react-router",
-        "react-router-v7",
         "tailwind",
-        "hacktoberfest"
+        "hacktoberfest",
+        "nyc"
     ],
     "homepage": "https://github.com/bradgarropy/nyc-2026",
     "bugs": {
