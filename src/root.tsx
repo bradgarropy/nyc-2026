@@ -9,9 +9,9 @@ const App = () => {
     return (
         <html lang="en">
             <head>
-                <title>🗽 nyc 2026</title>
+                <title>nyc 2026</title>
                 <link rel="stylesheet" href={tailwindStyles} />
-                <link rel="icon" type="image/png" href="/favicon.png" />
+                <link rel="icon" href="https://fav.farm/🗽" />
                 <meta charSet="utf-8" />
 
                 <meta
@@ -50,9 +50,9 @@ export const ErrorBoundary = () => {
     return (
         <html lang="en">
             <head>
-                <title>🗽 nyc 2026</title>
+                <title>nyc 2026</title>
                 <link rel="stylesheet" href={tailwindStyles} />
-                <link rel="icon" type="image/png" href="/favicon.png" />
+                <link rel="icon" href="https://fav.farm/🗽" />
                 <meta charSet="utf-8" />
 
                 <meta

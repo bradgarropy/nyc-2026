@@ -6,7 +6,7 @@ import Route from "~/routes/index"
 test("renders the trip map", () => {
     render(<Route />)
 
-    expect(document.title).toEqual("🗽 nyc 2026 | home")
+    expect(document.title).toEqual("nyc 2026")
     expect(
         screen.getByRole("img", {name: /nyc 2026 trip map/i}),
     ).toBeInTheDocument()
