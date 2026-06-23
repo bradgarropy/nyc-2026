@@ -1,0 +1,43 @@
+import {MAP_WIDTH} from "~/components/TripMap/TripMap"
+import type {LabelSide, Stop} from "~/data/types"
+
+// Distance from the dot center to the start of the label text.
+const OFFSET = 11
+
+// Auto-pick a side from the stop's x so labels lean toward the interior (and
+// off the map edges); `stop.labelSide` overrides for crowded spots.
+const sideFor = (stop: Stop): LabelSide =>
+    stop.labelSide ?? (stop.coord.x > MAP_WIDTH / 2 ? "left" : "right")
+
+type StopLabelProps = {
+    stop: Stop
+}
+
+// The stop's name, hidden until the surrounding stop group is hovered/focused.
+// A white halo (paint-order stroke) keeps it legible over lines and coastlines.
+const StopLabel = ({stop}: StopLabelProps) => {
+    const side = sideFor(stop)
+    const isLeft = side === "left"
+    const {x, y} = stop.coord
+
+    return (
+        <text
+            aria-hidden="true"
+            x={isLeft ? x - OFFSET : x + OFFSET}
+            y={y}
+            textAnchor={isLeft ? "end" : "start"}
+            dominantBaseline="middle"
+            className="font-helvetica pointer-events-none fill-[#1a1a1a] text-[11px] font-semibold opacity-0 transition-opacity duration-150 group-hover:opacity-100 group-focus-within:opacity-100"
+            style={{
+                paintOrder: "stroke",
+                stroke: "white",
+                strokeWidth: 3,
+                strokeLinejoin: "round",
+            }}
+        >
+            {stop.name}
+        </text>
+    )
+}
+
+export default StopLabel

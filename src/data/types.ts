@@ -4,6 +4,10 @@ export type StopCategory = "major" | "food" | "standard"
 
 export type TransitMode = "subway" | "walk" | "ferry" | "car"
 
+// Which side of the dot the hover label sits on. Defaults to auto (chosen from
+// the stop's x position); set explicitly to fix a crowded or edge stop.
+export type LabelSide = "left" | "right"
+
 export type Stop = {
     id: string
     name: string
@@ -17,6 +21,7 @@ export type Stop = {
     subwayLines?: string[]
     memories?: string[]
     photos?: string[]
+    labelSide?: LabelSide
 }
 
 export type Segment = {

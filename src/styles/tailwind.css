@@ -6,17 +6,16 @@
  * Canonical published hex values for each trunk-line color.
  */
 @theme {
-    --color-mta-blue: #0039a6; /* A C E   — 8th Ave */
-    --color-mta-orange: #ff6319; /* B D F M — 6th Ave */
-    --color-mta-light-green: #6cbe45; /* G       — Crosstown */
-    --color-mta-brown: #996633; /* J Z     — Nassau St */
-    --color-mta-grey: #a7a9ac; /* L       — 14th St–Canarsie */
-    --color-mta-yellow: #fccc0a; /* N Q R W — Broadway */
-    --color-mta-red: #ee352e; /* 1 2 3   — 7th Ave */
-    --color-mta-green: #00933c; /* 4 5 6   — Lexington Ave */
-    --color-mta-purple: #b933ad; /* 7       — Flushing */
-    --color-mta-shuttle: #808183; /* S       — shuttles */
-    --color-mta-teal: #00add0; /* T       — Second Ave */
+    --color-mta-blue: #0062cf; /* A C E   — 8th Ave */
+    --color-mta-orange: #eb6800; /* B D F M — 6th Ave */
+    --color-mta-light-green: #799534; /* G       — Crosstown */
+    --color-mta-brown: #8e5c33; /* J Z     — Nassau St */
+    --color-mta-grey: #7c858c; /* L       — 14th St–Canarsie */
+    --color-mta-yellow: #f6bc26; /* N Q R W — Broadway */
+    --color-mta-red: #d82233; /* 1 2 3   — 7th Ave */
+    --color-mta-green: #009952; /* 4 5 6   — Lexington Ave */
+    --color-mta-purple: #9a38a1; /* 7       — Flushing */
+    --color-mta-teal: #008eb7; /* T       — Second Ave */
 
     /* poster surface + geography */
     --color-mta-paper: #ffffff; /* land */

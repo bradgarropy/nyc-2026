@@ -12,7 +12,7 @@ const baseStop: Stop = {
     days: [1],
 }
 
-test("renders a labeled circle at the stop coordinate", () => {
+test("renders a circle at the stop coordinate", () => {
     const {container} = render(
         <svg>
             <StopNode stop={baseStop} color="red" />
@@ -22,7 +22,6 @@ test("renders a labeled circle at the stop coordinate", () => {
     const circle = container.querySelector("circle")
     expect(circle).toHaveAttribute("cx", "100")
     expect(circle).toHaveAttribute("cy", "200")
-    expect(circle).toHaveAttribute("aria-label", "Test Stop")
 })
 
 test("uses the day color for a normal stop", () => {

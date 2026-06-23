@@ -25,7 +25,6 @@ const StopNode = ({stop, color}: StopNodeProps) => {
 
     return (
         <circle
-            aria-label={stop.name}
             cx={x}
             cy={y}
             r={radius}

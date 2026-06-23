@@ -6,14 +6,25 @@ type DayLineProps = {
     day: Day
     stops: Record<string, Stop>
     strokeWidth?: number
+    // Faded back when another day is selected in the filter.
+    dimmed?: boolean
 }
 
 // One day's route, drawn segment-by-segment so each leg can carry its own
 // mode-driven stroke style (walk dotted, subway solid, ferry dashed, car
 // dash-dot).
-const DayLine = ({day, stops, strokeWidth = 8}: DayLineProps) => {
+const DayLine = ({
+    day,
+    stops,
+    strokeWidth = 8,
+    dimmed = false,
+}: DayLineProps) => {
     return (
-        <g aria-label={`Day ${day.id} line`}>
+        <g
+            aria-label={`Day ${day.id} line`}
+            opacity={dimmed ? 0.15 : 1}
+            className="transition-opacity duration-200"
+        >
             {day.segments.map((segment, index) => {
                 const from = stops[day.route[index]]
                 const to = stops[day.route[index + 1]]
