@@ -1,6 +1,16 @@
 import {expect, test} from "vitest"
 
-import {MODE_DASH} from "~/utils/trip"
+import {MODE_DASH, subwayLineColor} from "~/utils/trip"
+
+test("subwayLineColor maps lines to their trunk color", () => {
+    expect(subwayLineColor("E")).toBe("var(--color-mta-blue)")
+    expect(subwayLineColor("1")).toBe("var(--color-mta-red)")
+    expect(subwayLineColor("N")).toBe("var(--color-mta-yellow)")
+})
+
+test("subwayLineColor falls back to grey for unknown lines", () => {
+    expect(subwayLineColor("X")).toBe("var(--color-mta-grey)")
+})
 
 test("MODE_DASH renders subway as a solid line", () => {
     expect(MODE_DASH.subway).toBeUndefined()

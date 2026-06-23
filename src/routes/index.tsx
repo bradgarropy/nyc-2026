@@ -6,12 +6,15 @@ import DayLine from "~/components/DayLine"
 import DayList from "~/components/DayList"
 import StopLabel from "~/components/StopLabel"
 import StopNode from "~/components/StopNode"
+import StopPanel from "~/components/StopPanel"
 import TripMap from "~/components/TripMap"
 import {trip} from "~/data/trip"
+import type {Stop} from "~/data/types"
 
 const Route = () => {
     const {days, stops} = trip
     const [selectedDay, setSelectedDay] = useState<number | null>(null)
+    const [selectedStop, setSelectedStop] = useState<Stop | null>(null)
 
     const dayColors = Object.fromEntries(
         days.map(day => [day.id, day.color]),
@@ -60,9 +63,28 @@ const Route = () => {
                                     key={stop.id}
                                     // Dimmed stops (other days) are non-interactive:
                                     // no `group` class so the label can't hover in,
-                                    // and removed from the tab order.
+                                    // removed from the tab order, and not clickable.
+                                    role={dimmed ? undefined : "button"}
                                     tabIndex={dimmed ? -1 : 0}
                                     aria-label={stop.name}
+                                    onClick={
+                                        dimmed
+                                            ? undefined
+                                            : () => setSelectedStop(stop)
+                                    }
+                                    onKeyDown={
+                                        dimmed
+                                            ? undefined
+                                            : event => {
+                                                  if (
+                                                      event.key === "Enter" ||
+                                                      event.key === " "
+                                                  ) {
+                                                      event.preventDefault()
+                                                      setSelectedStop(stop)
+                                                  }
+                                              }
+                                    }
                                     className={`transition-opacity duration-200 ${
                                         dimmed
                                             ? ""
@@ -115,6 +137,12 @@ const Route = () => {
                     />
                 </div>
             </div>
+
+            <StopPanel
+                stop={selectedStop}
+                dayColors={dayColors}
+                onClose={() => setSelectedStop(null)}
+            />
         </>
     )
 }
