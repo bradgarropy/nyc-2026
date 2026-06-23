@@ -11,5 +11,5 @@ test("renders", () => {
         </MemoryRouter>,
     )
 
-    expect(screen.getByText("nyc 2026")).toBeInTheDocument()
+    expect(screen.getByText("New York City 2026")).toBeInTheDocument()
 })

@@ -7,7 +7,6 @@ import type {Stop} from "~/data/types"
 const baseStop: Stop = {
     id: "x",
     name: "Test Stop",
-    category: "standard",
     coord: {x: 100, y: 200},
     days: [1],
 }
@@ -24,24 +23,14 @@ test("renders a circle at the stop coordinate", () => {
     expect(circle).toHaveAttribute("cy", "200")
 })
 
-test("uses the day color for a normal stop", () => {
+test("uses the day color for the ring, with a uniform radius", () => {
     const {container} = render(
         <svg>
             <StopNode stop={baseStop} color="red" />
         </svg>,
     )
 
-    expect(container.querySelector("circle")).toHaveAttribute("stroke", "red")
-})
-
-test("hubs use a dark transfer ring and a larger radius", () => {
-    const {container} = render(
-        <svg>
-            <StopNode stop={{...baseStop, isHub: true}} color="red" />
-        </svg>,
-    )
-
     const circle = container.querySelector("circle")
-    expect(circle).toHaveAttribute("stroke", "#1a1a1a")
-    expect(circle).toHaveAttribute("r", "7")
+    expect(circle).toHaveAttribute("stroke", "red")
+    expect(circle).toHaveAttribute("r", "5")
 })

@@ -2,9 +2,8 @@
 //
 // Coordinates are a first pass on the 658 x 1269 base-map grid (north up, west =
 // low x, downtown = high y), placed on the green Manhattan body (never Staten Island).
-// They are meant to be nudged once we see the map render. Notes are seeded from
-// the trip brain-dump where we have real memories; everything else uses lorem
-// ipsum placeholders to be replaced later.
+// They are meant to be nudged once we see the map render. Notes use lorem ipsum
+// placeholders to be replaced later.
 
 import type {Stop} from "~/data/types"
 
@@ -12,13 +11,11 @@ const LOREM =
     "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
 
 export const stops: Record<string, Stop> = {
-    // --- hub + arrival/departure anchors ---
+    // --- hotel + arrival/departure anchors ---
     "hotel": {
         id: "hotel",
         name: "Hotel",
-        category: "standard",
         coord: {x: 150, y: 538},
-        isHub: true,
         days: [1, 2, 3, 4, 5],
         notes: "Home base on 34th/36th St. " + LOREM,
         subwayLines: ["A", "C", "E"],
@@ -26,8 +23,6 @@ export const stops: Record<string, Stop> = {
     "lincoln-tunnel": {
         id: "lincoln-tunnel",
         name: "Lincoln Tunnel",
-        emoji: "🚗",
-        category: "standard",
         coord: {x: 14, y: 540},
         days: [1],
         notes: "Drove in from New Jersey through the Lincoln Tunnel. " + LOREM,
@@ -35,8 +30,6 @@ export const stops: Record<string, Stop> = {
     "lga": {
         id: "lga",
         name: "LaGuardia (LGA)",
-        emoji: "✈️",
-        category: "standard",
         coord: {x: 560, y: 360},
         days: [5],
         notes: "Uber to LGA, then home to Houston and Austin. " + LOREM,
@@ -46,7 +39,6 @@ export const stops: Record<string, Stop> = {
     "times-square": {
         id: "times-square",
         name: "Times Square",
-        category: "major",
         coord: {x: 168, y: 518},
         days: [1],
         notes: LOREM,
@@ -54,7 +46,6 @@ export const stops: Record<string, Stop> = {
     "lego-store": {
         id: "lego-store",
         name: "LEGO Store",
-        category: "standard",
         coord: {x: 244, y: 512},
         days: [1],
         notes: LOREM,
@@ -62,25 +53,20 @@ export const stops: Record<string, Stop> = {
     "nintendo-store": {
         id: "nintendo-store",
         name: "Nintendo Store",
-        category: "standard",
         coord: {x: 212, y: 513},
-        isHub: true,
         days: [1, 2],
         notes: LOREM,
     },
     "rockefeller-center": {
         id: "rockefeller-center",
         name: "Rockefeller Center",
-        category: "major",
         coord: {x: 230, y: 508},
-        isHub: true,
         days: [1, 2],
         notes: LOREM,
     },
     "fao-schwarz": {
         id: "fao-schwarz",
         name: "FAO Schwarz",
-        category: "standard",
         coord: {x: 258, y: 492},
         days: [1],
         notes: LOREM,
@@ -88,7 +74,6 @@ export const stops: Record<string, Stop> = {
     "st-patricks": {
         id: "st-patricks",
         name: "St. Patrick's Cathedral",
-        category: "standard",
         coord: {x: 252, y: 505},
         days: [1],
         notes: "Admired it from the outside. " + LOREM,
@@ -96,7 +81,6 @@ export const stops: Record<string, Stop> = {
     "grand-central": {
         id: "grand-central",
         name: "Grand Central Terminal",
-        category: "major",
         coord: {x: 300, y: 520},
         days: [1],
         notes: LOREM,
@@ -104,20 +88,15 @@ export const stops: Record<string, Stop> = {
     "hot-dog-cart": {
         id: "hot-dog-cart",
         name: "Grand Central Hot Dog Cart",
-        emoji: "🌭",
-        category: "food",
         coord: {x: 312, y: 526},
         days: [1],
         notes: LOREM,
-        restaurants: ["Grand Central Hot Dog Cart"],
-        memories: ["The Grand Central hot dog cart 🌭"],
     },
 
     // --- Day 2: Downtown + Brooklyn ---
     "cloudflare-office": {
         id: "cloudflare-office",
         name: "Cloudflare Office",
-        category: "standard",
         coord: {x: 165, y: 815},
         days: [2],
         notes: "At the World Trade Center. " + LOREM,
@@ -126,9 +105,7 @@ export const stops: Record<string, Stop> = {
     "oculus": {
         id: "oculus",
         name: "Oculus",
-        category: "major",
         coord: {x: 186, y: 830},
-        isHub: true,
         days: [2, 4],
         notes: LOREM,
         subwayLines: ["E"],
@@ -136,7 +113,6 @@ export const stops: Record<string, Stop> = {
     "ground-zero": {
         id: "ground-zero",
         name: "Ground Zero",
-        category: "standard",
         coord: {x: 158, y: 833},
         days: [2],
         notes: LOREM,
@@ -144,7 +120,6 @@ export const stops: Record<string, Stop> = {
     "wtc": {
         id: "wtc",
         name: "World Trade Center",
-        category: "major",
         coord: {x: 173, y: 825},
         days: [2],
         notes: LOREM,
@@ -153,7 +128,6 @@ export const stops: Record<string, Stop> = {
     "brooklyn-bridge": {
         id: "brooklyn-bridge",
         name: "Brooklyn Bridge",
-        category: "major",
         coord: {x: 395, y: 825},
         days: [2],
         notes: LOREM,
@@ -161,7 +135,6 @@ export const stops: Record<string, Stop> = {
     "washington-street": {
         id: "washington-street",
         name: "Washington Street",
-        category: "standard",
         coord: {x: 470, y: 760},
         days: [2],
         notes: "The classic Manhattan Bridge photo spot. " + LOREM,
@@ -169,7 +142,6 @@ export const stops: Record<string, Stop> = {
     "pebble-beach": {
         id: "pebble-beach",
         name: "Pebble Beach",
-        category: "standard",
         coord: {x: 460, y: 738},
         days: [2],
         notes: LOREM,
@@ -177,17 +149,13 @@ export const stops: Record<string, Stop> = {
     "westville-dumbo": {
         id: "westville-dumbo",
         name: "Westville DUMBO",
-        emoji: "🥗",
-        category: "food",
         coord: {x: 482, y: 775},
         days: [2],
         notes: LOREM,
-        restaurants: ["Westville DUMBO"],
     },
     "janes-carousel": {
         id: "janes-carousel",
         name: "Jane's Carousel",
-        category: "major",
         coord: {x: 458, y: 755},
         days: [2],
         notes: LOREM,
@@ -195,7 +163,6 @@ export const stops: Record<string, Stop> = {
     "statue-liberty": {
         id: "statue-liberty",
         name: "Statue of Liberty",
-        category: "major",
         coord: {x: 190, y: 955},
         days: [2],
         notes: LOREM,
@@ -203,7 +170,6 @@ export const stops: Record<string, Stop> = {
     "pier-79": {
         id: "pier-79",
         name: "Pier 79",
-        category: "standard",
         coord: {x: 50, y: 530},
         days: [2],
         notes: "Ferry landing on the far west side. " + LOREM,
@@ -213,7 +179,6 @@ export const stops: Record<string, Stop> = {
     "central-park-zoo": {
         id: "central-park-zoo",
         name: "Central Park Zoo",
-        category: "standard",
         coord: {x: 245, y: 470},
         days: [3],
         notes: LOREM,
@@ -221,7 +186,6 @@ export const stops: Record<string, Stop> = {
     "central-park": {
         id: "central-park",
         name: "Central Park",
-        category: "major",
         coord: {x: 185, y: 425},
         days: [3],
         notes: LOREM,
@@ -229,17 +193,13 @@ export const stops: Record<string, Stop> = {
     "el-mitote": {
         id: "el-mitote",
         name: "El Mitote",
-        emoji: "🌮",
-        category: "food",
         coord: {x: 100, y: 425},
         days: [3],
         notes: LOREM,
-        restaurants: ["El Mitote"],
     },
     "apple-fifth": {
         id: "apple-fifth",
         name: "Apple Fifth Avenue",
-        category: "major",
         coord: {x: 262, y: 485},
         days: [3],
         notes: LOREM,
@@ -247,7 +207,6 @@ export const stops: Record<string, Stop> = {
     "368-broadway": {
         id: "368-broadway",
         name: "368 Broadway",
-        category: "standard",
         coord: {x: 190, y: 702},
         days: [3],
         notes: "In SoHo. " + LOREM,
@@ -255,18 +214,15 @@ export const stops: Record<string, Stop> = {
     "washington-square": {
         id: "washington-square",
         name: "Washington Square Park",
-        category: "major",
         coord: {x: 150, y: 662},
         days: [3],
         notes: LOREM,
-        memories: ["Too much weed at Washington Square 😅"],
     },
 
     // --- Day 4: West Side + Chinatown ---
     "hudson-yards": {
         id: "hudson-yards",
         name: "Hudson Yards",
-        category: "major",
         coord: {x: 60, y: 545},
         days: [4],
         notes: LOREM,
@@ -274,7 +230,6 @@ export const stops: Record<string, Stop> = {
     "vessel": {
         id: "vessel",
         name: "Vessel",
-        category: "standard",
         coord: {x: 74, y: 553},
         days: [4],
         notes: LOREM,
@@ -282,7 +237,6 @@ export const stops: Record<string, Stop> = {
     "high-line": {
         id: "high-line",
         name: "High Line",
-        category: "major",
         coord: {x: 70, y: 618},
         days: [4],
         notes: LOREM,
@@ -290,7 +244,6 @@ export const stops: Record<string, Stop> = {
     "chelsea-market": {
         id: "chelsea-market",
         name: "Chelsea Market",
-        category: "standard",
         coord: {x: 108, y: 595},
         days: [4],
         notes: LOREM,
@@ -298,7 +251,6 @@ export const stops: Record<string, Stop> = {
     "little-island": {
         id: "little-island",
         name: "Little Island",
-        category: "standard",
         coord: {x: 58, y: 632},
         days: [4],
         notes: LOREM,
@@ -306,7 +258,6 @@ export const stops: Record<string, Stop> = {
     "chinatown": {
         id: "chinatown",
         name: "Chinatown",
-        category: "major",
         coord: {x: 255, y: 722},
         days: [4],
         notes: LOREM,
@@ -314,7 +265,6 @@ export const stops: Record<string, Stop> = {
     "pell-street": {
         id: "pell-street",
         name: "Pell Street",
-        category: "standard",
         coord: {x: 263, y: 728},
         days: [4],
         notes: LOREM,
@@ -322,7 +272,6 @@ export const stops: Record<string, Stop> = {
     "doyers-street": {
         id: "doyers-street",
         name: "Doyers Street",
-        category: "standard",
         coord: {x: 270, y: 736},
         days: [4],
         notes: LOREM,
@@ -330,7 +279,6 @@ export const stops: Record<string, Stop> = {
     "mott-street": {
         id: "mott-street",
         name: "Mott Street",
-        category: "standard",
         coord: {x: 247, y: 730},
         days: [4],
         notes: LOREM,
@@ -338,27 +286,20 @@ export const stops: Record<string, Stop> = {
     "bubble-tea": {
         id: "bubble-tea",
         name: "Bubble Tea",
-        emoji: "🧋",
-        category: "food",
         coord: {x: 257, y: 740},
         days: [4],
         notes: LOREM,
-        restaurants: ["Bubble Tea"],
     },
     "dumplings": {
         id: "dumplings",
-        name: "Dumplings",
-        emoji: "🥟",
-        category: "food",
+        name: "Chinatown Dumplings",
         coord: {x: 250, y: 733},
         days: [4],
         notes: LOREM,
-        restaurants: ["Chinatown Dumplings"],
     },
     "wall-street": {
         id: "wall-street",
         name: "Wall Street",
-        category: "standard",
         coord: {x: 240, y: 858},
         days: [4],
         notes: LOREM,
@@ -366,7 +307,6 @@ export const stops: Record<string, Stop> = {
     "nyse": {
         id: "nyse",
         name: "NYSE",
-        category: "standard",
         coord: {x: 232, y: 867},
         days: [4],
         notes: LOREM,
@@ -374,7 +314,6 @@ export const stops: Record<string, Stop> = {
     "pop-mart": {
         id: "pop-mart",
         name: "Pop Mart",
-        category: "standard",
         coord: {x: 198, y: 818},
         days: [4],
         notes: LOREM,
@@ -382,11 +321,8 @@ export const stops: Record<string, Stop> = {
     "pizza-suprema": {
         id: "pizza-suprema",
         name: "Pizza Suprema",
-        emoji: "🍕",
-        category: "food",
         coord: {x: 118, y: 548},
         days: [4],
         notes: "Near Penn Station / MSG. " + LOREM,
-        restaurants: ["Pizza Suprema"],
     },
 }

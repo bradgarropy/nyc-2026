@@ -17,15 +17,13 @@ const day = (id: number, travel?: boolean): Day => ({
 
 const days = [day(1), day(2), day(3), day(4), day(5, true)]
 
-test("shows All Days plus the touring days (not travel days)", () => {
+test("shows All Days plus every day including the departure day", () => {
     render(<DayFilter days={days} selectedDay={null} onSelect={() => {}} />)
 
     expect(screen.getByRole("button", {name: "All Days"})).toBeInTheDocument()
     expect(screen.getByRole("button", {name: "Day 1"})).toBeInTheDocument()
     expect(screen.getByRole("button", {name: "Day 4"})).toBeInTheDocument()
-    expect(
-        screen.queryByRole("button", {name: "Day 5"}),
-    ).not.toBeInTheDocument()
+    expect(screen.getByRole("button", {name: "Day 5"})).toBeInTheDocument()
 })
 
 test("marks the selected day as pressed", () => {

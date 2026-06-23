@@ -7,7 +7,6 @@ import type {Stop} from "~/data/types"
 const stop = (overrides: Partial<Stop> = {}): Stop => ({
     id: "x",
     name: "Test Stop",
-    category: "standard",
     coord: {x: 100, y: 200},
     days: [1],
     ...overrides,

@@ -3,6 +3,7 @@ import {useState} from "react"
 import BaseMap from "~/components/BaseMap"
 import DayFilter from "~/components/DayFilter"
 import DayLine from "~/components/DayLine"
+import DayList from "~/components/DayList"
 import StopLabel from "~/components/StopLabel"
 import StopNode from "~/components/StopNode"
 import TripMap from "~/components/TripMap"
@@ -26,53 +27,65 @@ const Route = () => {
         <>
             <title>🗽 nyc 2026 | home</title>
 
-            <div className="mx-auto flex max-w-lg flex-col gap-4">
+            <div className="mx-auto flex max-w-5xl flex-col gap-6">
                 <DayFilter
                     days={days}
                     selectedDay={selectedDay}
                     onSelect={setSelectedDay}
                 />
 
-                <TripMap>
-                    <BaseMap />
+                <div className="flex flex-col gap-6 lg:flex-row lg:items-start">
+                    <div className="lg:w-1/2 lg:shrink-0">
+                        <TripMap>
+                            <BaseMap />
 
-                    {days.map(day => (
-                        <DayLine
-                            key={day.id}
-                            day={day}
-                            stops={stops}
-                            strokeWidth={5}
-                            dimmed={isDayDimmed(day.id)}
-                        />
-                    ))}
-
-                    {Object.values(stops).map(stop => {
-                        const dimmed = isStopDimmed(stop.days)
-
-                        return (
-                            <g
-                                key={stop.id}
-                                // Dimmed stops (other days) are non-interactive:
-                                // no `group` class so the label can't hover in,
-                                // and removed from the tab order.
-                                tabIndex={dimmed ? -1 : 0}
-                                aria-label={stop.name}
-                                className={`transition-opacity duration-200 ${
-                                    dimmed
-                                        ? ""
-                                        : "group cursor-pointer focus:outline-none"
-                                }`}
-                                opacity={dimmed ? 0.15 : 1}
-                            >
-                                <StopNode
-                                    stop={stop}
-                                    color={dayColors[stop.days[0]]}
+                            {days.map(day => (
+                                <DayLine
+                                    key={day.id}
+                                    day={day}
+                                    stops={stops}
+                                    strokeWidth={5}
+                                    dimmed={isDayDimmed(day.id)}
                                 />
-                                <StopLabel stop={stop} />
-                            </g>
-                        )
-                    })}
-                </TripMap>
+                            ))}
+
+                            {Object.values(stops).map(stop => {
+                                const dimmed = isStopDimmed(stop.days)
+
+                                return (
+                                    <g
+                                        key={stop.id}
+                                        // Dimmed stops (other days) are non-interactive:
+                                        // no `group` class so the label can't hover in,
+                                        // and removed from the tab order.
+                                        tabIndex={dimmed ? -1 : 0}
+                                        aria-label={stop.name}
+                                        className={`transition-opacity duration-200 ${
+                                            dimmed
+                                                ? ""
+                                                : "group cursor-pointer focus:outline-none"
+                                        }`}
+                                        opacity={dimmed ? 0.15 : 1}
+                                    >
+                                        <StopNode
+                                            stop={stop}
+                                            color={dayColors[stop.days[0]]}
+                                        />
+                                        <StopLabel stop={stop} />
+                                    </g>
+                                )
+                            })}
+                        </TripMap>
+                    </div>
+
+                    <div className="lg:flex-1">
+                        <DayList
+                            days={days}
+                            stops={stops}
+                            selectedDay={selectedDay}
+                        />
+                    </div>
+                </div>
             </div>
         </>
     )

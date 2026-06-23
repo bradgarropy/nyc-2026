@@ -1,36 +1,24 @@
 import type {Stop} from "~/data/types"
 
-// Near-black used for transfer-station (hub) rings, MTA style.
-const INK = "#1a1a1a"
-
 type StopNodeProps = {
     stop: Stop
-    // The stop's line color (its day's color); hubs override with a dark ring.
+    // The stop's line color (its day's color).
     color: string
 }
 
-const radiusFor = (stop: Stop): number => {
-    if (stop.isHub) {
-        return 7
-    }
-
-    return stop.category === "major" ? 5.5 : 4.5
-}
-
-// A station "bulb": white fill with a colored ring. Hubs are larger with a dark
-// transfer-station ring; other stops take their day's line color.
+// A station "bulb": a small white-filled circle with a colored ring in the
+// day's line color. Every stop renders identically.
 const StopNode = ({stop, color}: StopNodeProps) => {
     const {x, y} = stop.coord
-    const radius = radiusFor(stop)
 
     return (
         <circle
             cx={x}
             cy={y}
-            r={radius}
+            r={5}
             fill="white"
-            stroke={stop.isHub ? INK : color}
-            strokeWidth={stop.isHub ? 2.5 : 2}
+            stroke={color}
+            strokeWidth={2}
         />
     )
 }

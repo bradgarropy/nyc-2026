@@ -1,5 +1,4 @@
 import type {Day} from "~/data/types"
-import {filterableDays} from "~/utils/trip"
 
 type DayFilterProps = {
     days: Day[]
@@ -14,7 +13,6 @@ const BASE_CLASS =
 // All Days / Day 1-4 toggle. The selected day's button fills with its line
 // color; the rest are outlines.
 const DayFilter = ({days, selectedDay, onSelect}: DayFilterProps) => {
-    const options = filterableDays(days)
     const allActive = selectedDay === null
 
     return (
@@ -36,7 +34,7 @@ const DayFilter = ({days, selectedDay, onSelect}: DayFilterProps) => {
                 All Days
             </button>
 
-            {options.map(day => {
+            {days.map(day => {
                 const active = selectedDay === day.id
 
                 return (

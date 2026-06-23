@@ -17,8 +17,8 @@ shop — not a Google Maps timeline.
 - Stops that recur across days (Hotel, Rockefeller Center, Nintendo Store,
   Oculus) render as **transfer stations** (a single larger node with multiple
   colored lines passing through), exactly like a real interchange.
-- Clicking a stop opens a detail panel: photos, notes, restaurants, subway lines
-  used, and funny memories.
+- Clicking a stop opens a detail panel: photos, notes, subway lines
+  used, and notes.
 - A **day filter** (All / Day 1–4) highlights one line and dims the rest.
 - The trip was **5 days / 4 nights**. The drive in through the **Lincoln Tunnel**
   is the start of **Day 1** (not a separate day); **Day 5** is the departure to
@@ -45,15 +45,14 @@ shop — not a Google Maps timeline.
 
 ## 3. the trip (source data)
 
-Classification legend: ⭐ major · 🍴 food · • standard · `[mode]` = transit
-between stops · `hub` = recurring transfer station.
+Legend: `[mode]` = transit between stops · `hub` = recurring transfer station.
 
 ### Day 1 — Tue, Jun 16 · Midtown / Times Square · 🔴 line
 
-Lincoln Tunnel 🚗 → `[car]` → Hotel (hub) → Times Square ⭐ → LEGO Store →
-Nintendo Store (hub) → Rockefeller Center (hub) ⭐ → FAO Schwarz →
-St. Patrick's Cathedral (outside) → Grand Central Terminal ⭐ →
-Grand Central Hot Dog Cart 🍴🌭 → Hotel (hub)
+Lincoln Tunnel 🚗 → `[car]` → Hotel (hub) → Times Square → LEGO Store →
+Nintendo Store (hub) → Rockefeller Center (hub) → FAO Schwarz →
+St. Patrick's Cathedral (outside) → Grand Central Terminal →
+Grand Central Hot Dog Cart → Hotel (hub)
 
 _(The day opens with the drive in through the Lincoln Tunnel — that first `car`
 segment is dash-dot styled, but it's part of the red Day 1 line, not a separate
@@ -61,23 +60,23 @@ day.)_
 
 ### Day 2 — Wed, Jun 17 · Downtown + Brooklyn · 🔵 line (rode the E)
 
-Hotel (hub) → [E train] → Cloudflare Office → Oculus (hub) ⭐ → Ground Zero →
-World Trade Center ⭐ → [walk] → Brooklyn Bridge ⭐ → [walk] →
-Washington Street (Manhattan Bridge photo) → Pebble Beach → Westville DUMBO 🍴🥗 →
-Jane's Carousel ⭐ → [ferry] → Statue of Liberty ⭐ → Pier 79 →
+Hotel (hub) → [E train] → Cloudflare Office → Oculus (hub) → Ground Zero →
+World Trade Center → [walk] → Brooklyn Bridge → [walk] →
+Washington Street (Manhattan Bridge photo) → Pebble Beach → Westville DUMBO →
+Jane's Carousel → [ferry] → Statue of Liberty → Pier 79 →
 Rockefeller Center (hub) → Nintendo Store (hub) → Hotel (hub)
 
 ### Day 3 — Thu, Jun 18 · Central Park + Midtown + SoHo · 🟢 line
 
-Hotel (hub) → Central Park Zoo → Central Park ⭐ → El Mitote 🍴🌮 →
-Apple Fifth Avenue ⭐ → 368 Broadway → Washington Square Park ⭐ → Hotel (hub)
+Hotel (hub) → Central Park Zoo → Central Park → El Mitote →
+Apple Fifth Avenue → 368 Broadway → Washington Square Park → Hotel (hub)
 
 ### Day 4 — Fri, Jun 19 · West Side + Chinatown · 🟠 line
 
-Hotel (hub) → Hudson Yards ⭐ → Vessel → High Line ⭐ → Chelsea Market →
-Little Island → Chinatown ⭐ → Pell Street → Doyers Street → Mott Street →
-Bubble Tea 🍴 → Dumplings 🍴 → Wall Street → NYSE → Oculus (hub) →
-Pop Mart → Hotel (hub) → Pizza Suprema 🍴🍕
+Hotel (hub) → Hudson Yards → Vessel → High Line → Chelsea Market →
+Little Island → Chinatown → Pell Street → Doyers Street → Mott Street →
+Bubble Tea → Dumplings → Wall Street → NYSE → Oculus (hub) →
+Pop Mart → Hotel (hub) → Pizza Suprema
 
 _(Friends Apartment was on the original list but we skipped it — omitted.)_
 
@@ -136,21 +135,15 @@ Types live in `src/data/types.ts`; the data is split across `src/data/stops.ts`,
 
 ```ts
 // src/data/types.ts
-type StopCategory = "major" | "food" | "standard"
 type TransitMode = "subway" | "walk" | "ferry" | "car"
 
 type Stop = {
     id: string // "hotel", "times-square", ...
     name: string
-    emoji?: string // "🌭", "🥗", ...
-    category: StopCategory
     coord: {x: number; y: number} // schematic grid position
-    isHub?: boolean // recurring transfer station
     days: number[] // [1,2,3,4] — which day-lines pass through
     notes?: string
-    restaurants?: string[]
     subwayLines?: string[] // ["E"], ["N","Q","R","W"], ...
-    memories?: string[] // "Grand Central hot dog cart", ...
     photos?: string[] // "/images/<id>/01.jpg" (placeholders for now)
 }
 
@@ -181,9 +174,7 @@ type Trip = {days: Day[]; stops: Record<string, Stop>}
   **departure** is **Day 5** (`travel: true`, Hotel → LGA, `car`). Both render
   dash-dot via the car style. `filterableDays()` (in `src/utils/trip.ts`) hides
   travel-only days from the toggle.
-- **Notes/memories** are seeded from the trip brain-dump where we have them
-  (e.g. the Grand Central hot dog cart, Washington Square Park); every other stop
-  gets lorem-ipsum placeholder text to be replaced later.
+- **Notes** use lorem-ipsum placeholder text to be replaced later.
 
 ---
 
@@ -219,7 +210,7 @@ type Trip = {days: Day[]; stops: Record<string, Stop>}
       car dash-dot. Use round line caps so the dotted walk reads as dots.
     - `<StopNode stop={...}>` — white bulb with colored ring. Hubs render larger
       with multiple colored rings (one per day passing through). Food/major stops
-      get an emoji/badge.
+      get a badge.
     - `<StopLabel>` — MTA-style label beside each dot, collision-avoided where easy.
 - Render order: **base map first**, then lines, then nodes, then labels.
 - A small **legend** also documents the four mode line styles.
@@ -253,8 +244,8 @@ and the ferry crosses water.
     - `All Days` shows everything.
 - **Stop panel** (detail): click/tap a stop → responsive panel.
     - desktop: right-side drawer; mobile: bottom sheet.
-    - shows photo gallery (placeholders now), notes, restaurants, subway lines used,
-      funny memories.
+    - shows photo gallery (placeholders now), notes, subway lines used,
+      notes.
     - keyboard-accessible: stops are focusable, `Enter`/`Space` opens, `Esc` closes.
 - **Legend**: day color + theme list; doubles as the filter on small screens.
 
@@ -265,7 +256,7 @@ and the ferry crosses water.
 Enabled by default for v1; we may drop them if they don't earn their keep. Both
 are toggleable so turning them off is trivial:
 
-- 🍴 **Food layer** — highlight just the food stops (Westville, El Mitote,
+- **Food layer** — highlight just the food stops (Westville, El Mitote,
   Pizza Suprema, Hot Dog Cart, Bubble Tea, Dumplings).
 - 🚇 **Subway-lines layer** — show which lines we used (E; B D F M; N Q R W;
   A C; 1 2 3; Ferry) as a separate key.
@@ -321,7 +312,7 @@ public/
 ## 12. build phases
 
 1. **Data** — author `src/data/{types,stops,days,trip}.ts`: every stop with
-   first-pass coords, days, categories, hubs, memories, placeholder photo paths.
+   first-pass coords, days, categories, hubs, placeholder photo paths.
    _(done)_
 2. **Static map** — `<TripMap>` + `<DayLine>` + `<StopNode>` + `<StopLabel>`
    rendering all days at once. Nail the 45° path helper. _(lines done; stops +
@@ -332,7 +323,7 @@ public/
    like NYC and looks clean.
 5. **Day filter** — highlight/dim by day; `All Days` default.
 6. **Stop panel** — clickable stops → responsive drawer/bottom-sheet with
-   gallery, notes, restaurants, lines, memories.
+   gallery, notes, lines.
 7. **MTA polish** — title block, legend, fonts, colors, shadows; the Day 5
    dotted departure tail.
 8. **A11y + responsive** — keyboard nav, focus states, mobile bottom sheet.
@@ -363,7 +354,7 @@ public/
 - Geographically-rough schematic with 45° MTA-style routing.
 - **v1 is a static, fit-to-screen poster** (clickable stops); not deployed yet
   (**local-only** for this pass).
-- Notes/memories seeded from the brain-dump; lorem ipsum elsewhere.
+- Notes use lorem ipsum placeholders.
 
 ---
 

@@ -1,7 +1,5 @@
 // Shared types for the NYC 2026 trip data — see plan.md §5.
 
-export type StopCategory = "major" | "food" | "standard"
-
 export type TransitMode = "subway" | "walk" | "ferry" | "car"
 
 // Which side of the dot the hover label sits on. Defaults to auto (chosen from
@@ -11,15 +9,10 @@ export type LabelSide = "left" | "right"
 export type Stop = {
     id: string
     name: string
-    emoji?: string
-    category: StopCategory
     coord: {x: number; y: number}
-    isHub?: boolean
     days: number[]
     notes?: string
-    restaurants?: string[]
     subwayLines?: string[]
-    memories?: string[]
     photos?: string[]
     labelSide?: LabelSide
 }

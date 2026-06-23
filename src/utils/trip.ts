@@ -1,11 +1,6 @@
 // Trip-related helpers — see plan.md for the design.
 
-import type {Day, TransitMode} from "~/data/types"
-
-// The day filter only offers the real touring days, not travel-only days like
-// the Day 5 departure to LGA.
-export const filterableDays = (days: Day[]): Day[] =>
-    days.filter(day => !day.travel)
+import type {TransitMode} from "~/data/types"
 
 // Each transit mode renders with a distinct line style so the way we got
 // between stops is easy to read. Values are SVG `stroke-dasharray` (undefined =

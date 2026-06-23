@@ -8,21 +8,18 @@ const stops: Record<string, Stop> = {
     a: {
         id: "a",
         name: "A",
-        category: "standard",
         coord: {x: 0, y: 0},
         days: [1],
     },
     b: {
         id: "b",
         name: "B",
-        category: "standard",
         coord: {x: 10, y: 10},
         days: [1],
     },
     c: {
         id: "c",
         name: "C",
-        category: "standard",
         coord: {x: 20, y: 0},
         days: [1],
     },
