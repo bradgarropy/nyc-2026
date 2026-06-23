@@ -4,10 +4,10 @@ import {MODE_DASH} from "~/utils/trip"
 // The four transit modes, in the order they read best, paired with the label
 // shown next to each line sample.
 const MODES: {mode: TransitMode; label: string}[] = [
-    {mode: "subway", label: "Subway"},
     {mode: "walk", label: "Walk"},
-    {mode: "ferry", label: "Ferry"},
     {mode: "car", label: "Car"},
+    {mode: "ferry", label: "Ferry"},
+    {mode: "subway", label: "Subway"},
 ]
 
 // A small key documenting the line style used for each transit mode. The line

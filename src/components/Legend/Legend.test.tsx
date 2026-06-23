@@ -21,9 +21,9 @@ test("each line sample uses its mode's dash style", () => {
     const {container} = render(<Legend />)
     const lines = container.querySelectorAll("line")
 
-    // subway is solid, so it has no dash array; the other three do.
-    expect(lines[0].getAttribute("stroke-dasharray")).toBeNull()
-    expect(lines[1].getAttribute("stroke-dasharray")).toBe(MODE_DASH.walk)
+    // order: walk, car, ferry, subway — subway is solid (no dash array).
+    expect(lines[0].getAttribute("stroke-dasharray")).toBe(MODE_DASH.walk)
+    expect(lines[1].getAttribute("stroke-dasharray")).toBe(MODE_DASH.car)
     expect(lines[2].getAttribute("stroke-dasharray")).toBe(MODE_DASH.ferry)
-    expect(lines[3].getAttribute("stroke-dasharray")).toBe(MODE_DASH.car)
+    expect(lines[3].getAttribute("stroke-dasharray")).toBeNull()
 })
