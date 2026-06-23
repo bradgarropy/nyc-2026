@@ -1,11 +1,22 @@
 @import "tailwindcss";
 
+@theme {
+    /* type */
+    --font-helvetica: Helvetica, "Helvetica Neue", Arial, sans-serif;
+}
+
 /*
  * MTA subway line colors.
  * Source: https://www.mta.info/document/168976 (MTA brand colors)
  * Canonical published hex values for each trunk-line color.
+ *
+ * These live in :root (not @theme) on purpose: we reference them only as raw
+ * `var(--color-mta-*)` values (inline styles + data), never as Tailwind utility
+ * classes, and several are built dynamically (subwayLineColor). Keeping them in
+ * @theme let Tailwind tree-shake the "unused" ones (e.g. brown / J), leaving the
+ * bullet transparent. A plain :root block always emits every token.
  */
-@theme {
+:root {
     --color-mta-blue: #0062cf; /* A C E   — 8th Ave */
     --color-mta-orange: #eb6800; /* B D F M — 6th Ave */
     --color-mta-light-green: #799534; /* G       — Crosstown */
@@ -21,9 +32,6 @@
     --color-mta-paper: #ffffff; /* land */
     --color-mta-water: #bed0e0; /* rivers + harbor */
     --color-mta-park: #f0f4d0; /* parks */
-
-    /* type */
-    --font-helvetica: Helvetica, "Helvetica Neue", Arial, sans-serif;
 }
 
 nav > a.active {
