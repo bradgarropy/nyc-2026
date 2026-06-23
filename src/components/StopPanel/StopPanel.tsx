@@ -1,7 +1,7 @@
 import {useEffect, useRef, useState} from "react"
 
 import type {Stop} from "~/data/types"
-import {subwayLineColor} from "~/utils/trip"
+import {subwayLineColor, textColorOn} from "~/utils/trip"
 
 type StopPanelProps = {
     stop: Stop | null
@@ -90,9 +90,12 @@ const StopPanel = ({stop, dayColors, onClose}: StopPanelProps) => {
                                     {content.days.map(day => (
                                         <span
                                             key={day}
-                                            className="rounded-full px-2 py-0.5 text-xs font-semibold text-white"
+                                            className="rounded-full px-2 py-0.5 text-xs font-semibold"
                                             style={{
                                                 backgroundColor: dayColors[day],
+                                                color: textColorOn(
+                                                    dayColors[day],
+                                                ),
                                             }}
                                         >
                                             Day {day}

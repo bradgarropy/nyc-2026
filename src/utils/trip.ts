@@ -25,6 +25,14 @@ const LINE_COLOR: Record<string, string> = Object.fromEntries(
 export const subwayLineColor = (line: string): string =>
     LINE_COLOR[line.toUpperCase()] ?? "var(--color-mta-grey)"
 
+// MTA color tokens light enough that text sitting on top of them should be dark
+// rather than white (the MTA uses black on its yellow line, for example).
+const LIGHT_COLORS = new Set(["var(--color-mta-yellow)"])
+
+// The legible text color ("#1a1a1a" or "white") to use on top of a given fill.
+export const textColorOn = (color: string): string =>
+    LIGHT_COLORS.has(color) ? "#1a1a1a" : "white"
+
 // Each transit mode renders with a distinct line style so the way we got
 // between stops is easy to read. Values are SVG `stroke-dasharray` (undefined =
 // a solid line). Pair the dotted "walk" style with round line caps.

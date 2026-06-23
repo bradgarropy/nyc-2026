@@ -1,4 +1,5 @@
 import type {Day} from "~/data/types"
+import {textColorOn} from "~/utils/trip"
 
 type DayFilterProps = {
     days: Day[]
@@ -47,7 +48,7 @@ const DayFilter = ({days, selectedDay, onSelect}: DayFilterProps) => {
                         style={{
                             borderColor: day.color,
                             backgroundColor: active ? day.color : "transparent",
-                            color: active ? "white" : "#1a1a1a",
+                            color: active ? textColorOn(day.color) : "#1a1a1a",
                         }}
                     >
                         Day {day.id}
