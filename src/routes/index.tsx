@@ -4,6 +4,7 @@ import BaseMap from "~/components/BaseMap"
 import DayFilter from "~/components/DayFilter"
 import DayLine from "~/components/DayLine"
 import DayList from "~/components/DayList"
+import Legend from "~/components/Legend"
 import StopLabel from "~/components/StopLabel"
 import StopNode from "~/components/StopNode"
 import StopPanel from "~/components/StopPanel"
@@ -38,6 +39,11 @@ const Route = () => {
                         selectedDay={selectedDay}
                         onSelect={setSelectedDay}
                     />
+                </div>
+
+                {/* legend: top-right, above the itinerary, aligned to its bottom */}
+                <div className="lg:col-start-2 lg:row-start-1 lg:flex lg:items-end">
+                    <Legend />
                 </div>
 
                 {/* map: left; its natural height drives the row */}

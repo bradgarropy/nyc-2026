@@ -12,4 +12,5 @@ test("renders", () => {
     )
 
     expect(screen.getByText("New York City 2026")).toBeInTheDocument()
+    expect(screen.getByText("June 16–20, 2026")).toBeInTheDocument()
 })
