@@ -12,7 +12,7 @@ export const days: Day[] = [
         id: 1,
         date: "Tue, Jun 16",
         theme: "Midtown & Times Square",
-        color: "var(--color-mta-red)",
+        color: "var(--color-mta-blue)",
         route: [
             "lincoln-tunnel",
             "macys",
@@ -43,7 +43,7 @@ export const days: Day[] = [
         id: 2,
         date: "Wed, Jun 17",
         theme: "Downtown & Brooklyn",
-        color: "var(--color-mta-blue)",
+        color: "var(--color-mta-yellow)",
         route: [
             "hotel",
             "wtc",
@@ -78,7 +78,7 @@ export const days: Day[] = [
         id: 3,
         date: "Thu, Jun 18",
         theme: "Central Park & Midtown & SoHo",
-        color: "var(--color-mta-green)",
+        color: "var(--color-mta-orange)",
         route: [
             "hotel",
             "liberty-bagels",
@@ -109,7 +109,7 @@ export const days: Day[] = [
         id: 4,
         date: "Fri, Jun 19",
         theme: "West Side & Chinatown",
-        color: "var(--color-mta-orange)",
+        color: "var(--color-mta-red)",
         route: [
             "hotel",
             "bh-photo",
@@ -148,7 +148,7 @@ export const days: Day[] = [
         id: 5,
         date: "Sat, Jun 20",
         theme: "Departure",
-        color: "var(--color-mta-grey)",
+        color: "var(--color-mta-brown)",
         travel: true,
         route: ["hotel", "lga"],
         segments: [{mode: "car"}],
