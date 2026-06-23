@@ -11,7 +11,7 @@ export const days: Day[] = [
     {
         id: 1,
         date: "Tue, Jun 16",
-        theme: "Midtown / Times Square",
+        theme: "Midtown & Times Square",
         color: "var(--color-mta-red)",
         route: [
             "lincoln-tunnel",
@@ -42,7 +42,7 @@ export const days: Day[] = [
     {
         id: 2,
         date: "Wed, Jun 17",
-        theme: "Downtown + Brooklyn",
+        theme: "Downtown & Brooklyn",
         color: "var(--color-mta-blue)",
         route: [
             "hotel",
@@ -81,7 +81,7 @@ export const days: Day[] = [
     {
         id: 3,
         date: "Thu, Jun 18",
-        theme: "Central Park + Midtown + SoHo",
+        theme: "Central Park & Midtown & SoHo",
         color: "var(--color-mta-green)",
         route: [
             "hotel",
@@ -106,7 +106,7 @@ export const days: Day[] = [
     {
         id: 4,
         date: "Fri, Jun 19",
-        theme: "West Side + Chinatown",
+        theme: "West Side & Chinatown",
         color: "var(--color-mta-orange)",
         route: [
             "hotel",
