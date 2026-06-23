@@ -50,11 +50,13 @@ const DayItinerary = ({day, stops, onSelectStop}: DayItineraryProps) => {
             className="font-helvetica overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm"
         >
             <header className="px-4 py-3">
-                <div className="flex items-baseline gap-2">
+                <div className="flex items-baseline justify-between gap-2">
                     <h3 className="text-lg font-bold text-[#1a1a1a]">
                         Day {day.id}
                     </h3>
-                    <span className="text-sm text-gray-500">{day.date}</span>
+                    <span className="text-xs font-semibold tracking-wide text-gray-400 uppercase">
+                        {day.date}
+                    </span>
                 </div>
                 <p className="text-sm font-semibold" style={{color: day.color}}>
                     {day.theme}
