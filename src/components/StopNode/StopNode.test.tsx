@@ -34,3 +34,27 @@ test("uses the day color for the ring, with a uniform radius", () => {
     expect(circle).toHaveAttribute("stroke", "red")
     expect(circle).toHaveAttribute("r", "5")
 })
+
+test("pops (scales up) when hovered", () => {
+    const {container} = render(
+        <svg>
+            <StopNode stop={baseStop} color="red" hovered />
+        </svg>,
+    )
+
+    const circle = container.querySelector("circle")
+    expect(circle).toHaveAttribute("data-hovered", "true")
+    expect(circle?.getAttribute("class")).toContain("scale-[1.4]")
+})
+
+test("is not popped by default", () => {
+    const {container} = render(
+        <svg>
+            <StopNode stop={baseStop} color="red" />
+        </svg>,
+    )
+
+    expect(container.querySelector("circle")).not.toHaveAttribute(
+        "data-hovered",
+    )
+})

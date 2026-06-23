@@ -77,6 +77,26 @@ test("calls onSelectStop with the stop when its name is clicked", async () => {
     expect(onSelectStop).toHaveBeenCalledExactlyOnceWith(stops["times-square"])
 })
 
+test("reports hovered stop id on mouse enter/leave", async () => {
+    const user = userEvent.setup()
+    const onHoverStop = vi.fn()
+    render(
+        <DayItinerary
+            day={day}
+            stops={stops}
+            onSelectStop={() => {}}
+            onHoverStop={onHoverStop}
+        />,
+    )
+
+    const button = screen.getByRole("button", {name: "Times Square"})
+    await user.hover(button)
+    expect(onHoverStop).toHaveBeenLastCalledWith("times-square")
+
+    await user.unhover(button)
+    expect(onHoverStop).toHaveBeenLastCalledWith(null)
+})
+
 test("renders stop names as plain text when not selectable", () => {
     render(<DayItinerary day={day} stops={stops} />)
 

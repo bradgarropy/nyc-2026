@@ -11,11 +11,15 @@ const sideFor = (stop: Stop): LabelSide =>
 
 type StopLabelProps = {
     stop: Stop
+    // Forces the label visible (driven by a hovered day-card stop). Direct map
+    // hover/focus still reveals it via the group-hover/-focus-within classes.
+    hovered?: boolean
 }
 
-// The stop's name, hidden until the surrounding stop group is hovered/focused.
-// A white halo (paint-order stroke) keeps it legible over lines and coastlines.
-const StopLabel = ({stop}: StopLabelProps) => {
+// The stop's name, hidden until the surrounding stop group is hovered/focused
+// (or `hovered` is set from the day card). A white halo (paint-order stroke)
+// keeps it legible over lines and coastlines.
+const StopLabel = ({stop, hovered}: StopLabelProps) => {
     const side = sideFor(stop)
     const isLeft = side === "left"
     const {x, y} = stop.coord
@@ -27,7 +31,9 @@ const StopLabel = ({stop}: StopLabelProps) => {
             y={y}
             textAnchor={isLeft ? "end" : "start"}
             dominantBaseline="middle"
-            className="font-helvetica pointer-events-none fill-[#1a1a1a] text-[11px] font-semibold opacity-0 transition-opacity duration-150 group-hover:opacity-100 group-focus-within:opacity-100"
+            className={`font-helvetica pointer-events-none fill-[#1a1a1a] text-[11px] font-semibold transition-opacity duration-150 group-hover:opacity-100 group-focus-within:opacity-100 ${
+                hovered ? "opacity-100" : "opacity-0"
+            }`}
             style={{
                 paintOrder: "stroke",
                 stroke: "white",

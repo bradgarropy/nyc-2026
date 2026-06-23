@@ -16,6 +16,7 @@ const Route = () => {
     const {days, stops} = trip
     const [selectedDay, setSelectedDay] = useState<number | null>(null)
     const [selectedStop, setSelectedStop] = useState<Stop | null>(null)
+    const [hoveredStopId, setHoveredStopId] = useState<string | null>(null)
 
     const dayColors = Object.fromEntries(
         days.map(day => [day.id, day.color]),
@@ -102,8 +103,12 @@ const Route = () => {
                                     <StopNode
                                         stop={stop}
                                         color={dayColors[stop.days[0]]}
+                                        hovered={hoveredStopId === stop.id}
                                     />
-                                    <StopLabel stop={stop} />
+                                    <StopLabel
+                                        stop={stop}
+                                        hovered={hoveredStopId === stop.id}
+                                    />
                                 </g>
                             )
                         })}
@@ -121,6 +126,7 @@ const Route = () => {
                             stops={stops}
                             selectedDay={selectedDay}
                             onSelectStop={setSelectedStop}
+                            onHoverStop={setHoveredStopId}
                         />
                     </div>
 

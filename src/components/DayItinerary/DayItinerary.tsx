@@ -38,12 +38,19 @@ type DayItineraryProps = {
     // When provided, each stop name becomes a button that opens its detail
     // panel — mirroring the clickable stops on the map.
     onSelectStop?: (stop: Stop) => void
+    // Hovering a stop highlights the matching stop on the map.
+    onHoverStop?: (id: string | null) => void
 }
 
 // A single day's events as a stylized subway-line itinerary: station dots joined
 // by a colored line whose style encodes how we travelled between each pair of
 // stops (see `connectorStyle`).
-const DayItinerary = ({day, stops, onSelectStop}: DayItineraryProps) => {
+const DayItinerary = ({
+    day,
+    stops,
+    onSelectStop,
+    onHoverStop,
+}: DayItineraryProps) => {
     return (
         <section
             aria-label={`Day ${day.id} itinerary`}
@@ -119,6 +126,10 @@ const DayItinerary = ({day, stops, onSelectStop}: DayItineraryProps) => {
                                     <button
                                         type="button"
                                         onClick={() => onSelectStop(stop)}
+                                        onMouseEnter={() =>
+                                            onHoverStop?.(stop.id)
+                                        }
+                                        onMouseLeave={() => onHoverStop?.(null)}
                                         className="cursor-pointer rounded text-left text-sm font-semibold text-[#1a1a1a] focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-400"
                                     >
                                         {stop.name}

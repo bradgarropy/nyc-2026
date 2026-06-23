@@ -36,6 +36,18 @@ test("is hidden until the stop group is hovered/focused", () => {
     expect(text?.getAttribute("class")).toContain("group-hover:opacity-100")
 })
 
+test("is forced visible when hovered from the day card", () => {
+    const {container} = render(
+        <svg>
+            <StopLabel stop={stop()} hovered />
+        </svg>,
+    )
+
+    const text = container.querySelector("text")
+    expect(text?.getAttribute("class")).toContain("opacity-100")
+    expect(text?.getAttribute("class")).not.toContain("opacity-0")
+})
+
 test("a west-side stop labels to the right", () => {
     const {container} = render(
         <svg>
