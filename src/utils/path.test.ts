@@ -1,6 +1,6 @@
 import {expect, test} from "vitest"
 
-import {bend, routePath, segmentPath} from "~/utils/path"
+import {bend, roundedPolygon, routePath, segmentPath} from "~/utils/path"
 
 test("no bend for a horizontal leg", () => {
     expect(bend({x: 0, y: 0}, {x: 10, y: 0})).toBeNull()
@@ -50,4 +50,47 @@ test("routePath chains legs with their bends", () => {
     ])
 
     expect(d).toEqual("M 0 0 L 6 0 L 10 4 L 10 20")
+})
+
+test("roundedPolygon is empty for fewer than 3 points", () => {
+    expect(
+        roundedPolygon(
+            [
+                {x: 0, y: 0},
+                {x: 10, y: 0},
+            ],
+            4,
+        ),
+    ).toEqual("")
+})
+
+test("roundedPolygon closes the path with a quadratic per corner", () => {
+    const square = [
+        {x: 0, y: 0},
+        {x: 100, y: 0},
+        {x: 100, y: 100},
+        {x: 0, y: 100},
+    ]
+    const d = roundedPolygon(square, 10)
+
+    expect(d.startsWith("M ")).toBe(true)
+    expect(d.endsWith(" Z")).toBe(true)
+    // one quadratic (corner) per vertex
+    expect(d.match(/Q /g)).toHaveLength(square.length)
+})
+
+test("roundedPolygon clamps the radius to half the shortest edge", () => {
+    // edges of length 10, radius 999 -> corner points land at edge midpoints (5)
+    const square = [
+        {x: 0, y: 0},
+        {x: 10, y: 0},
+        {x: 10, y: 10},
+        {x: 0, y: 10},
+    ]
+    const d = roundedPolygon(square, 999)
+
+    // corner points sit at the edge midpoints (5): enters at (0,5), curves
+    // through the (0,0) vertex, exits at (5,0).
+    expect(d.startsWith("M 0 5")).toBe(true)
+    expect(d).toContain("Q 0 0 5 0")
 })

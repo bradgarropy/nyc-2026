@@ -211,6 +211,8 @@ type Trip = {days: Day[]; stops: Record<string, Stop>}
 ## 7. rendering
 
 - `<TripMap>` — the SVG canvas (viewBox, optional pan/zoom later).
+    - `<BaseMap>` — the **geographic base layer** (see §7a). Rendered first, under
+      everything else.
     - `<DayLine day={...}>` — the day's colored route, 45° routing, rounded
       caps/joins. Drawn segment-by-segment so each segment's **stroke style comes
       from its `mode`** (`MODE_DASH`): walk dotted, subway solid, ferry dashed,
@@ -219,8 +221,28 @@ type Trip = {days: Day[]; stops: Record<string, Stop>}
       with multiple colored rings (one per day passing through). Food/major stops
       get an emoji/badge.
     - `<StopLabel>` — MTA-style label beside each dot, collision-avoided where easy.
-- Render order: lines first (so dots sit on top), then nodes, then labels.
+- Render order: **base map first**, then lines, then nodes, then labels.
 - A small **legend** also documents the four mode line styles.
+
+## 7a. base map (geographic backdrop) — _planned, tackle later_
+
+Right now the background is a plain paper rectangle, so you can't read the
+**shape of the island or the water**. We want the backdrop to vaguely resemble
+NYC: simplified **land** masses (Manhattan + a sliver of Brooklyn/NJ) over
+**water** (Hudson + East River + harbor), so the day-lines clearly sit on land
+and the ferry crosses water.
+
+- Use `references/mta-subway-map.pdf` as the visual reference for how the MTA
+  renders land vs. water (water tint, park green, coastline feel).
+- Implementation idea: a `<BaseMap>` component drawing a few hand-authored SVG
+  polygons/paths on the same 1000 × 1500 grid:
+    - water fill behind everything (e.g. a `--color-mta-water` token),
+    - Manhattan landmass + small Brooklyn/NJ wedges (`--color-mta-paper`/land),
+    - optionally Central Park as a green block and the rivers as gaps.
+- Keep it **stylized and simple** (a handful of polygons), not an accurate
+  coastline — it just needs to read as "NYC" behind the schematic.
+- Add `--color-mta-water` (and maybe `--color-mta-land`/park green) to the
+  Tailwind theme when we build this.
 
 ---
 
@@ -270,6 +292,7 @@ src/
     index.tsx            # renders <TripMap/> + <Legend/> + <DayFilter/>
   components/
     TripMap/             # SVG canvas
+    BaseMap/             # geographic backdrop (land + water), planned
     DayLine/
     StopNode/
     StopLabel/
@@ -301,19 +324,22 @@ public/
    first-pass coords, days, categories, hubs, memories, placeholder photo paths.
    _(done)_
 2. **Static map** — `<TripMap>` + `<DayLine>` + `<StopNode>` + `<StopLabel>`
-   rendering all days at once. Nail the 45° path helper.
-3. **Coordinate pass** — render, screenshot, nudge coordinates until it reads
+   rendering all days at once. Nail the 45° path helper. _(lines done; stops +
+   labels next)_
+3. **Base map** — `<BaseMap>` geographic backdrop (land + water) so the island
+   shape reads behind the schematic (see §7a).
+4. **Coordinate pass** — render, screenshot, nudge coordinates until it reads
    like NYC and looks clean.
-4. **Day filter** — highlight/dim by day; `All Days` default.
-5. **Stop panel** — clickable stops → responsive drawer/bottom-sheet with
+5. **Day filter** — highlight/dim by day; `All Days` default.
+6. **Stop panel** — clickable stops → responsive drawer/bottom-sheet with
    gallery, notes, restaurants, lines, memories.
-6. **MTA polish** — title block, legend, fonts, colors, shadows; the Day 5
+7. **MTA polish** — title block, legend, fonts, colors, shadows; the Day 5
    dotted departure tail.
-7. **A11y + responsive** — keyboard nav, focus states, mobile bottom sheet.
-8. **Photos + README** — wire `/public/images/<stop-id>/`, document swapping in
+8. **A11y + responsive** — keyboard nav, focus states, mobile bottom sheet.
+9. **Photos + README** — wire `/public/images/<stop-id>/`, document swapping in
    real photos.
-9. **Tests** — unit (data integrity, path helper, components) + a couple of
-   Playwright flows (filter a day, open a stop).
+10. **Tests** — unit (data integrity, path helper, components) + a couple of
+    Playwright flows (filter a day, open a stop).
 
 ---
 

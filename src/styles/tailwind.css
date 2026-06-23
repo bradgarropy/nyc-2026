@@ -18,8 +18,10 @@
     --color-mta-shuttle: #808183; /* S       — shuttles */
     --color-mta-teal: #00add0; /* T       — Second Ave */
 
-    /* poster surface */
-    --color-mta-paper: #f5f3ec; /* warm off-white background */
+    /* poster surface + geography */
+    --color-mta-paper: #ffffff; /* land */
+    --color-mta-water: #bed0e0; /* rivers + harbor */
+    --color-mta-park: #f0f4d0; /* parks */
 
     /* type */
     --font-helvetica: Helvetica, "Helvetica Neue", Arial, sans-serif;

@@ -8,7 +8,7 @@ test("renders the map canvas", () => {
 
     const svg = screen.getByRole("img", {name: /nyc 2026 trip map/i})
     expect(svg).toBeInTheDocument()
-    expect(svg).toHaveAttribute("viewBox", "0 0 1000 1500")
+    expect(svg).toHaveAttribute("viewBox", "0 0 658 1269")
 })
 
 test("renders its children inside the canvas", () => {

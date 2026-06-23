@@ -38,6 +38,54 @@ export const segmentPath = (a: Point, b: Point): string => {
         : `M ${a.x} ${a.y} L ${b.x} ${b.y}`
 }
 
+// Closed SVG path for a polygon with rounded corners. Each vertex is replaced
+// by a short quadratic curve, so the straight (octilinear) edges are kept but
+// the joins are softened. `radius` is clamped to half of each adjoining edge.
+export const roundedPolygon = (points: Point[], radius: number): string => {
+    const n = points.length
+
+    if (n < 3) {
+        return ""
+    }
+
+    const distance = (a: Point, b: Point): number =>
+        Math.hypot(b.x - a.x, b.y - a.y)
+
+    // A point `r` units from `from` heading toward `to`.
+    const along = (from: Point, to: Point, r: number): Point => {
+        const length = distance(from, to)
+        const t = length === 0 ? 0 : r / length
+        return {
+            x: from.x + (to.x - from.x) * t,
+            y: from.y + (to.y - from.y) * t,
+        }
+    }
+
+    let d = ""
+
+    for (let i = 0; i < n; i++) {
+        const prev = points[(i - 1 + n) % n]
+        const curr = points[i]
+        const next = points[(i + 1) % n]
+
+        const enter = along(
+            curr,
+            prev,
+            Math.min(radius, distance(prev, curr) / 2),
+        )
+        const exit = along(
+            curr,
+            next,
+            Math.min(radius, distance(curr, next) / 2),
+        )
+
+        d += i === 0 ? `M ${enter.x} ${enter.y}` : ` L ${enter.x} ${enter.y}`
+        d += ` Q ${curr.x} ${curr.y} ${exit.x} ${exit.y}`
+    }
+
+    return `${d} Z`
+}
+
 // SVG path for a whole route, used when a single styled stroke is enough.
 export const routePath = (points: Point[]): string => {
     if (points.length === 0) {
