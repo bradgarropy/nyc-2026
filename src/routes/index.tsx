@@ -120,6 +120,7 @@ const Route = () => {
                             days={days}
                             stops={stops}
                             selectedDay={selectedDay}
+                            onSelectStop={setSelectedStop}
                         />
                     </div>
 

@@ -1,5 +1,6 @@
 import {render, screen} from "@testing-library/react"
-import {expect, test} from "vitest"
+import userEvent from "@testing-library/user-event"
+import {expect, test, vi} from "vitest"
 
 import DayItinerary from "~/components/DayItinerary"
 import type {Day, Stop} from "~/data/types"
@@ -64,4 +65,23 @@ test("connects stops with a line segment styled per transit mode", () => {
     expect(container.querySelectorAll('[data-mode="subway"]')).toHaveLength(2)
     expect(container.querySelectorAll('[data-mode="walk"]')).toHaveLength(2)
     expect(container.querySelectorAll('[data-mode="car"]')).toHaveLength(0)
+})
+
+test("calls onSelectStop with the stop when its name is clicked", async () => {
+    const user = userEvent.setup()
+    const onSelectStop = vi.fn()
+    render(<DayItinerary day={day} stops={stops} onSelectStop={onSelectStop} />)
+
+    await user.click(screen.getByRole("button", {name: "Times Square"}))
+
+    expect(onSelectStop).toHaveBeenCalledExactlyOnceWith(stops["times-square"])
+})
+
+test("renders stop names as plain text when not selectable", () => {
+    render(<DayItinerary day={day} stops={stops} />)
+
+    expect(
+        screen.queryByRole("button", {name: "Hotel"}),
+    ).not.toBeInTheDocument()
+    expect(screen.getByText("Hotel")).toBeInTheDocument()
 })

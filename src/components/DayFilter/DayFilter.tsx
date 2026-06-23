@@ -8,7 +8,7 @@ type DayFilterProps = {
 }
 
 const BASE_CLASS =
-    "rounded-full border-2 px-3 py-1 text-sm font-semibold transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
+    "cursor-pointer rounded-full border-2 px-3 py-1 text-sm font-semibold transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
 
 // All Days / Day 1-4 toggle. The selected day's button fills with its line
 // color; the rest are outlines.

@@ -35,12 +35,15 @@ const connectorStyle = (mode: TransitMode, color: string): CSSProperties => {
 type DayItineraryProps = {
     day: Day
     stops: Record<string, Stop>
+    // When provided, each stop name becomes a button that opens its detail
+    // panel — mirroring the clickable stops on the map.
+    onSelectStop?: (stop: Stop) => void
 }
 
 // A single day's events as a stylized subway-line itinerary: station dots joined
 // by a colored line whose style encodes how we travelled between each pair of
 // stops (see `connectorStyle`).
-const DayItinerary = ({day, stops}: DayItineraryProps) => {
+const DayItinerary = ({day, stops, onSelectStop}: DayItineraryProps) => {
     return (
         <section
             aria-label={`Day ${day.id} itinerary`}
@@ -110,9 +113,19 @@ const DayItinerary = ({day, stops}: DayItineraryProps) => {
                             </div>
 
                             <div className={isLast ? "pb-3" : "pb-8"}>
-                                <div className="text-sm font-semibold text-[#1a1a1a]">
-                                    {stop.name}
-                                </div>
+                                {onSelectStop ? (
+                                    <button
+                                        type="button"
+                                        onClick={() => onSelectStop(stop)}
+                                        className="cursor-pointer rounded text-left text-sm font-semibold text-[#1a1a1a] focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-400"
+                                    >
+                                        {stop.name}
+                                    </button>
+                                ) : (
+                                    <span className="text-sm font-semibold text-[#1a1a1a]">
+                                        {stop.name}
+                                    </span>
+                                )}
                             </div>
                         </li>
                     )
