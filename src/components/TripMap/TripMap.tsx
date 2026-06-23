@@ -17,7 +17,7 @@ const TripMap = ({children}: TripMapProps) => {
             preserveAspectRatio="xMidYMid meet"
             role="img"
             aria-label="NYC 2026 trip map"
-            className="font-helvetica mx-auto block h-auto w-full"
+            className="font-helvetica mx-auto block h-auto w-full overflow-hidden rounded-lg shadow-sm"
         >
             {children}
         </svg>

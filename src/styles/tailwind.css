@@ -29,3 +29,53 @@
 nav > a.active {
     @apply underline decoration-purple-500 decoration-4 underline-offset-4;
 }
+
+/*
+ * Scroll-driven fades for the day-card list (progressive enhancement — falls
+ * back to no fade where scroll-driven animations aren't supported). The list
+ * names a scroll timeline; the fade overlays animate against it: the top fades
+ * in over the first 4rem of scroll, the bottom fades out over the last 4rem.
+ */
+@keyframes nyc-fade-in {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes nyc-fade-out {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+    }
+}
+
+.day-list-scope {
+    timeline-scope: --day-list;
+}
+
+.day-list-scroller {
+    scroll-timeline: --day-list block;
+}
+
+.day-list-fade-top,
+.day-list-fade-bottom {
+    opacity: 0;
+    animation-timeline: --day-list;
+    animation-timing-function: linear;
+    animation-fill-mode: both;
+}
+
+.day-list-fade-top {
+    animation-name: nyc-fade-in;
+    animation-range: 0 4rem;
+}
+
+.day-list-fade-bottom {
+    animation-name: nyc-fade-out;
+    animation-range: calc(100% - 4rem) 100%;
+}
