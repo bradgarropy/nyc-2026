@@ -151,7 +151,7 @@ export const days: Day[] = [
     {
         id: 5,
         date: "Sat, Jun 20",
-        theme: "Departure — LGA",
+        theme: "Departure",
         color: "var(--color-mta-grey)",
         travel: true,
         route: ["hotel", "lga"],
