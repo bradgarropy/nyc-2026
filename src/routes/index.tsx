@@ -32,8 +32,9 @@ const Route = () => {
             <title>🗽 nyc 2026 | home</title>
 
             <div className="mx-auto flex max-w-5xl flex-col gap-6 lg:grid lg:grid-cols-2 lg:grid-rows-[auto_auto] lg:gap-x-6 lg:gap-y-4">
-                {/* filter: top-left, above the map only */}
-                <div className="lg:col-start-1 lg:row-start-1">
+                {/* filter: top-left, above the map only; bottom-aligned so it
+                    sits flush with the legend across the row */}
+                <div className="lg:col-start-1 lg:row-start-1 lg:flex lg:items-end">
                     <DayFilter
                         days={days}
                         selectedDay={selectedDay}
