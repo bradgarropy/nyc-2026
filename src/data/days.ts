@@ -62,7 +62,7 @@ export const days: Day[] = [
             "hotel",
         ],
         segments: [
-            {mode: "subway", line: "E"},
+            {mode: "subway"},
             {mode: "walk"},
             {mode: "walk"},
             {mode: "walk"},

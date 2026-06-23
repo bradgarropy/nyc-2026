@@ -21,7 +21,6 @@ export type Segment = {
     // The line style is driven by the mode (walk / subway / ferry / car each
     // render with a distinct stroke — see src/utils/trip.ts `MODE_DASH`).
     mode: TransitMode
-    line?: string
 }
 
 export type Day = {

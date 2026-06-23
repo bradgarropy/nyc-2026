@@ -1,10 +1,35 @@
+import type {CSSProperties} from "react"
+
 import type {Day, Stop, TransitMode} from "~/data/types"
 
-const MODE: Record<TransitMode, {icon: string; label: string}> = {
-    walk: {icon: "🚶", label: "Walk"},
-    subway: {icon: "🚇", label: "Subway"},
-    ferry: {icon: "⛴️", label: "Ferry"},
-    car: {icon: "🚗", label: "Car"},
+// The line style for the connector between two stops, keyed by transit mode.
+// This mirrors the map's `MODE_DASH` (subway solid, walk dotted, ferry dashed,
+// car dash-dot) using CSS backgrounds so the timeline reads the same way as the
+// map without any per-stop text. The connector is a 2px-wide vertical bar.
+const connectorStyle = (mode: TransitMode, color: string): CSSProperties => {
+    switch (mode) {
+        case "subway":
+            // solid — the "real" subway line
+            return {backgroundColor: color}
+        case "walk":
+            // dotted — round dots
+            return {
+                backgroundImage: `radial-gradient(circle, ${color} 0 1px, transparent 1.5px)`,
+                backgroundSize: "2px 6px",
+                backgroundRepeat: "repeat-y",
+                backgroundPosition: "center",
+            }
+        case "ferry":
+            // dashed
+            return {
+                backgroundImage: `repeating-linear-gradient(to bottom, ${color} 0 6px, transparent 6px 10px)`,
+            }
+        case "car":
+            // dash-dot (arrival / departure drives)
+            return {
+                backgroundImage: `repeating-linear-gradient(to bottom, ${color} 0 2px, transparent 2px 6px, ${color} 6px 12px, transparent 12px 16px)`,
+            }
+    }
 }
 
 type DayItineraryProps = {
@@ -12,9 +37,9 @@ type DayItineraryProps = {
     stops: Record<string, Stop>
 }
 
-// A single day's events as a stylized subway-line itinerary: a colored vertical
-// line with station dots, each stop's name + major badge, and the transit mode
-// used to reach the next stop.
+// A single day's events as a stylized subway-line itinerary: station dots joined
+// by a colored line whose style encodes how we travelled between each pair of
+// stops (see `connectorStyle`).
 const DayItinerary = ({day, stops}: DayItineraryProps) => {
     return (
         <section
@@ -36,31 +61,46 @@ const DayItinerary = ({day, stops}: DayItineraryProps) => {
             <ol className="px-4 py-3">
                 {day.route.map((stopId, index) => {
                     const stop = stops[stopId]
-                    const segment = day.segments[index]
-                    const mode = segment ? MODE[segment.mode] : null
                     const isLast = index === day.route.length - 1
+
+                    // The connector above this dot belongs to the previous
+                    // segment; the one below belongs to this one. Both halves of
+                    // a connector therefore share the same mode.
+                    const prevMode =
+                        index > 0 ? day.segments[index - 1]?.mode : undefined
+                    const nextMode = !isLast
+                        ? day.segments[index]?.mode
+                        : undefined
 
                     return (
                         <li key={`${stopId}-${index}`} className="flex gap-3">
-                            {/* marker column: a dot centered on the first text
-                                line, with line segments above/below it. The
-                                segment above the first dot and below the last
-                                are omitted, so the line starts and ends on a
-                                circle. */}
+                            {/* marker column: a dot centered on the stop name,
+                                with mode-styled line segments above/below it.
+                                The segment above the first dot and below the
+                                last are omitted, so the line starts and ends on
+                                a circle. */}
                             <div
                                 className="relative w-3.5 shrink-0 self-stretch"
                                 aria-hidden="true"
                             >
-                                {index > 0 ? (
+                                {prevMode ? (
                                     <span
+                                        data-mode={prevMode}
                                         className="absolute top-0 left-1/2 h-[11px] w-0.5 -translate-x-1/2"
-                                        style={{backgroundColor: day.color}}
+                                        style={connectorStyle(
+                                            prevMode,
+                                            day.color,
+                                        )}
                                     />
                                 ) : null}
-                                {!isLast ? (
+                                {nextMode ? (
                                     <span
+                                        data-mode={nextMode}
                                         className="absolute top-[11px] bottom-0 left-1/2 w-0.5 -translate-x-1/2"
-                                        style={{backgroundColor: day.color}}
+                                        style={connectorStyle(
+                                            nextMode,
+                                            day.color,
+                                        )}
                                     />
                                 ) : null}
                                 <span
@@ -69,19 +109,10 @@ const DayItinerary = ({day, stops}: DayItineraryProps) => {
                                 />
                             </div>
 
-                            <div className="pb-4">
+                            <div className={isLast ? "pb-3" : "pb-8"}>
                                 <div className="text-sm font-semibold text-[#1a1a1a]">
                                     {stop.name}
                                 </div>
-
-                                {mode ? (
-                                    <div className="mt-1 text-xs text-gray-400">
-                                        ↓ {mode.icon} {mode.label}
-                                        {segment?.line
-                                            ? ` ${segment.line}`
-                                            : ""}
-                                    </div>
-                                ) : null}
                             </div>
                         </li>
                     )

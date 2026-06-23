@@ -31,7 +31,7 @@ const day: Day = {
     theme: "Midtown",
     color: "var(--color-mta-red)",
     route: ["hotel", "times-square", "hot-dog"],
-    segments: [{mode: "subway", line: "E"}, {mode: "walk"}],
+    segments: [{mode: "subway"}, {mode: "walk"}],
 }
 
 test("renders the day header (number, date, theme)", () => {
@@ -48,13 +48,20 @@ test("lists each stop by name (no badges or decorative emoji)", () => {
     expect(screen.getByText("Hotel")).toBeInTheDocument()
     expect(screen.getByText("Hot Dog Cart")).toBeInTheDocument()
     expect(screen.getByText("Times Square")).toBeInTheDocument()
-    expect(screen.queryByText(/⭐/)).not.toBeInTheDocument()
-    expect(screen.queryByText(/🌭/)).not.toBeInTheDocument()
+    expect(screen.queryByText(/⭐|🌭|🚇|🚶|🚗|⛴️/)).not.toBeInTheDocument()
 })
 
-test("shows the transit mode between stops (with subway line)", () => {
-    render(<DayItinerary day={day} stops={stops} />)
+test("connects stops with a line segment styled per transit mode", () => {
+    const {container} = render(<DayItinerary day={day} stops={stops} />)
 
-    expect(screen.getByText(/Subway E/)).toBeInTheDocument()
-    expect(screen.getByText(/Walk/)).toBeInTheDocument()
+    // No per-stop transit text any more — the mode is shown by the line style.
+    expect(screen.queryByText(/Subway/)).not.toBeInTheDocument()
+    expect(screen.queryByText(/Walk/)).not.toBeInTheDocument()
+
+    // hotel → times-square is a subway segment; times-square → hot-dog is a
+    // walk. Each connector contributes two halves (below one dot, above the
+    // next), so each mode appears twice.
+    expect(container.querySelectorAll('[data-mode="subway"]')).toHaveLength(2)
+    expect(container.querySelectorAll('[data-mode="walk"]')).toHaveLength(2)
+    expect(container.querySelectorAll('[data-mode="car"]')).toHaveLength(0)
 })
