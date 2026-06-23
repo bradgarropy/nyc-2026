@@ -18,7 +18,6 @@ export const stops: Record<string, Stop> = {
         coord: {x: 150, y: 538},
         days: [1, 2, 3, 4, 5],
         notes: "Home base on 34th/36th St. " + LOREM,
-        subwayLines: ["A", "C", "E"],
     },
     "lincoln-tunnel": {
         id: "lincoln-tunnel",
@@ -35,7 +34,14 @@ export const stops: Record<string, Stop> = {
         notes: "Uber to LGA, then home to Houston and Austin. " + LOREM,
     },
 
-    // --- Day 1: Midtown / Times Square ---
+    // --- Day 1: Midtown & Times Square ---
+    "macys": {
+        id: "macys",
+        name: "Macy's",
+        coord: {x: 158, y: 548},
+        days: [1],
+        notes: "Herald Square flagship. " + LOREM,
+    },
     "times-square": {
         id: "times-square",
         name: "Times Square",
@@ -43,10 +49,24 @@ export const stops: Record<string, Stop> = {
         days: [1],
         notes: LOREM,
     },
-    "lego-store": {
-        id: "lego-store",
-        name: "LEGO Store",
-        coord: {x: 244, y: 512},
+    "disney-store": {
+        id: "disney-store",
+        name: "Disney Store",
+        coord: {x: 178, y: 512},
+        days: [1],
+        notes: LOREM,
+    },
+    "mms-store": {
+        id: "mms-store",
+        name: "M&M's Store",
+        coord: {x: 172, y: 506},
+        days: [1],
+        notes: LOREM,
+    },
+    "rockefeller-center": {
+        id: "rockefeller-center",
+        name: "Rockefeller Center",
+        coord: {x: 230, y: 508},
         days: [1],
         notes: LOREM,
     },
@@ -57,20 +77,6 @@ export const stops: Record<string, Stop> = {
         days: [1, 2],
         notes: LOREM,
     },
-    "rockefeller-center": {
-        id: "rockefeller-center",
-        name: "Rockefeller Center",
-        coord: {x: 230, y: 508},
-        days: [1, 2],
-        notes: LOREM,
-    },
-    "fao-schwarz": {
-        id: "fao-schwarz",
-        name: "FAO Schwarz",
-        coord: {x: 258, y: 492},
-        days: [1],
-        notes: LOREM,
-    },
     "st-patricks": {
         id: "st-patricks",
         name: "St. Patrick's Cathedral",
@@ -78,28 +84,28 @@ export const stops: Record<string, Stop> = {
         days: [1],
         notes: "Admired it from the outside. " + LOREM,
     },
-    "grand-central": {
-        id: "grand-central",
-        name: "Grand Central Terminal",
-        coord: {x: 300, y: 520},
+    "lego-store": {
+        id: "lego-store",
+        name: "LEGO Store",
+        coord: {x: 244, y: 512},
         days: [1],
         notes: LOREM,
     },
-    "hot-dog-cart": {
-        id: "hot-dog-cart",
-        name: "Grand Central Hot Dog Cart",
-        coord: {x: 312, y: 526},
+    "johns-pizza": {
+        id: "johns-pizza",
+        name: "John's of Times Square",
+        coord: {x: 160, y: 512},
         days: [1],
-        notes: LOREM,
+        notes: "Pizza in a converted church off Times Square. " + LOREM,
     },
 
     // --- Day 2: Downtown + Brooklyn ---
-    "cloudflare-office": {
-        id: "cloudflare-office",
-        name: "Cloudflare Office",
+    "wtc": {
+        id: "wtc",
+        name: "World Trade Center",
         coord: {x: 165, y: 815},
         days: [2],
-        notes: "At the World Trade Center. " + LOREM,
+        notes: "Cloudflare's office is here. " + LOREM,
         subwayLines: ["E"],
     },
     "oculus": {
@@ -108,7 +114,6 @@ export const stops: Record<string, Stop> = {
         coord: {x: 186, y: 830},
         days: [2, 4],
         notes: LOREM,
-        subwayLines: ["E"],
     },
     "ground-zero": {
         id: "ground-zero",
@@ -117,27 +122,12 @@ export const stops: Record<string, Stop> = {
         days: [2],
         notes: LOREM,
     },
-    "wtc": {
-        id: "wtc",
-        name: "World Trade Center",
-        coord: {x: 173, y: 825},
-        days: [2],
-        notes: LOREM,
-        subwayLines: ["E"],
-    },
     "brooklyn-bridge": {
         id: "brooklyn-bridge",
         name: "Brooklyn Bridge",
         coord: {x: 395, y: 825},
         days: [2],
         notes: LOREM,
-    },
-    "washington-street": {
-        id: "washington-street",
-        name: "Washington Street",
-        coord: {x: 470, y: 760},
-        days: [2],
-        notes: "The classic Manhattan Bridge photo spot. " + LOREM,
     },
     "pebble-beach": {
         id: "pebble-beach",
@@ -153,13 +143,6 @@ export const stops: Record<string, Stop> = {
         days: [2],
         notes: LOREM,
     },
-    "janes-carousel": {
-        id: "janes-carousel",
-        name: "Jane's Carousel",
-        coord: {x: 458, y: 755},
-        days: [2],
-        notes: LOREM,
-    },
     "statue-liberty": {
         id: "statue-liberty",
         name: "Statue of Liberty",
@@ -167,21 +150,43 @@ export const stops: Record<string, Stop> = {
         days: [2],
         notes: LOREM,
     },
-    "pier-79": {
-        id: "pier-79",
-        name: "Pier 79",
-        coord: {x: 50, y: 530},
+    "uss-intrepid": {
+        id: "uss-intrepid",
+        name: "USS Intrepid",
+        coord: {x: 38, y: 515},
         days: [2],
-        notes: "Ferry landing on the far west side. " + LOREM,
+        notes: "Sea, Air & Space Museum on the Hudson. " + LOREM,
+    },
+    "grand-central": {
+        id: "grand-central",
+        name: "Grand Central Terminal",
+        coord: {x: 300, y: 520},
+        days: [2],
+        notes: LOREM,
+    },
+    "hot-dog-cart": {
+        id: "hot-dog-cart",
+        name: "Grand Central Hot Dog Cart",
+        coord: {x: 312, y: 526},
+        days: [2],
+        notes: LOREM,
     },
 
-    // --- Day 3: Central Park + Midtown + SoHo ---
+    // --- Day 3: Central Park & Midtown & SoHo ---
+    "liberty-bagels": {
+        id: "liberty-bagels",
+        name: "Liberty Bagels",
+        coord: {x: 135, y: 532},
+        days: [3],
+        notes: "Breakfast bagels near the hotel. " + LOREM,
+    },
     "central-park-zoo": {
         id: "central-park-zoo",
         name: "Central Park Zoo",
         coord: {x: 245, y: 470},
         days: [3],
         notes: LOREM,
+        subwayLines: ["N"],
     },
     "central-park": {
         id: "central-park",
@@ -203,6 +208,7 @@ export const stops: Record<string, Stop> = {
         coord: {x: 262, y: 485},
         days: [3],
         notes: LOREM,
+        subwayLines: ["1"],
     },
     "368-broadway": {
         id: "368-broadway",
@@ -210,6 +216,7 @@ export const stops: Record<string, Stop> = {
         coord: {x: 190, y: 702},
         days: [3],
         notes: "In SoHo. " + LOREM,
+        subwayLines: ["E"],
     },
     "washington-square": {
         id: "washington-square",
@@ -217,13 +224,29 @@ export const stops: Record<string, Stop> = {
         coord: {x: 150, y: 662},
         days: [3],
         notes: LOREM,
+        subwayLines: ["N"],
+    },
+    "the-cage": {
+        id: "the-cage",
+        name: "The Cage",
+        coord: {x: 132, y: 666},
+        days: [3],
+        notes: "The West 4th Street Courts. " + LOREM,
+    },
+    "burgerology": {
+        id: "burgerology",
+        name: "Burgerology",
+        coord: {x: 160, y: 538},
+        days: [3],
+        notes: "Burgers right next to the hotel on 36th. " + LOREM,
+        subwayLines: ["E"],
     },
 
-    // --- Day 4: West Side + Chinatown ---
-    "hudson-yards": {
-        id: "hudson-yards",
-        name: "Hudson Yards",
-        coord: {x: 60, y: 545},
+    // --- Day 4: West Side & Chinatown ---
+    "bh-photo": {
+        id: "bh-photo",
+        name: "B&H Photo",
+        coord: {x: 110, y: 535},
         days: [4],
         notes: LOREM,
     },
@@ -231,6 +254,13 @@ export const stops: Record<string, Stop> = {
         id: "vessel",
         name: "Vessel",
         coord: {x: 74, y: 553},
+        days: [4],
+        notes: LOREM,
+    },
+    "hudson-yards": {
+        id: "hudson-yards",
+        name: "Hudson Yards",
+        coord: {x: 60, y: 545},
         days: [4],
         notes: LOREM,
     },
@@ -261,68 +291,43 @@ export const stops: Record<string, Stop> = {
         coord: {x: 255, y: 722},
         days: [4],
         notes: LOREM,
-    },
-    "pell-street": {
-        id: "pell-street",
-        name: "Pell Street",
-        coord: {x: 263, y: 728},
-        days: [4],
-        notes: LOREM,
-    },
-    "doyers-street": {
-        id: "doyers-street",
-        name: "Doyers Street",
-        coord: {x: 270, y: 736},
-        days: [4],
-        notes: LOREM,
-    },
-    "mott-street": {
-        id: "mott-street",
-        name: "Mott Street",
-        coord: {x: 247, y: 730},
-        days: [4],
-        notes: LOREM,
-    },
-    "bubble-tea": {
-        id: "bubble-tea",
-        name: "Bubble Tea",
-        coord: {x: 257, y: 740},
-        days: [4],
-        notes: LOREM,
-    },
-    "dumplings": {
-        id: "dumplings",
-        name: "Chinatown Dumplings",
-        coord: {x: 250, y: 733},
-        days: [4],
-        notes: LOREM,
-    },
-    "wall-street": {
-        id: "wall-street",
-        name: "Wall Street",
-        coord: {x: 240, y: 858},
-        days: [4],
-        notes: LOREM,
+        subwayLines: ["A", "B"],
     },
     "nyse": {
         id: "nyse",
-        name: "NYSE",
+        name: "New York Stock Exchange",
         coord: {x: 232, y: 867},
         days: [4],
         notes: LOREM,
+        subwayLines: ["J"],
     },
-    "pop-mart": {
-        id: "pop-mart",
-        name: "Pop Mart",
-        coord: {x: 198, y: 818},
+    "wall-street": {
+        id: "wall-street",
+        name: "Wall Street Bull",
+        coord: {x: 240, y: 858},
         days: [4],
-        notes: LOREM,
+        notes: "The Charging Bull statue. " + LOREM,
     },
     "pizza-suprema": {
         id: "pizza-suprema",
-        name: "Pizza Suprema",
+        name: "NY Pizza Suprema",
         coord: {x: 118, y: 548},
         days: [4],
         notes: "Near Penn Station / MSG. " + LOREM,
+        subwayLines: ["E"],
+    },
+    "madison-square-garden": {
+        id: "madison-square-garden",
+        name: "Madison Square Garden",
+        coord: {x: 128, y: 555},
+        days: [4],
+        notes: LOREM,
+    },
+    "penn-station": {
+        id: "penn-station",
+        name: "Penn Station",
+        coord: {x: 138, y: 558},
+        days: [4],
+        notes: LOREM,
     },
 }
