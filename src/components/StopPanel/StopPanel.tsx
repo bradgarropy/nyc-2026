@@ -1,6 +1,7 @@
 import {useEffect, useRef, useState} from "react"
 
 import type {Stop} from "~/data/types"
+import {createImageUrl} from "~/utils/images"
 import {subwayLineColor, textColorOn} from "~/utils/trip"
 
 type StopPanelProps = {
@@ -129,13 +130,21 @@ const StopPanel = ({stop, dayColors, onClose}: StopPanelProps) => {
 
                         <div className="flex-1 overflow-y-auto p-5">
                             <div className="grid grid-cols-3 gap-2">
-                                {photos.map(src => (
-                                    <img
-                                        key={src}
-                                        src={src}
-                                        alt=""
-                                        className="aspect-square w-full rounded-lg object-cover"
-                                    />
+                                {photos.map(id => (
+                                    <a
+                                        key={id}
+                                        href={createImageUrl(id, "full")}
+                                        target="_blank"
+                                        rel="noreferrer"
+                                        className="block rounded-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-400"
+                                    >
+                                        <img
+                                            src={createImageUrl(id, "thumb")}
+                                            alt={content.name}
+                                            loading="lazy"
+                                            className="aspect-square w-full rounded-lg object-cover"
+                                        />
+                                    </a>
                                 ))}
 
                                 {Array.from({length: placeholderCount}).map(

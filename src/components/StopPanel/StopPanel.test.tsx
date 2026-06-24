@@ -38,6 +38,34 @@ test("shows the stop name, day chips, notes, and subway lines", () => {
     expect(screen.getByText("E")).toBeInTheDocument()
 })
 
+test("renders photo thumbnails that link to the full size in a new tab", () => {
+    vi.stubEnv("VITE_CLOUDFLARE_IMAGES_HASH", "testhash")
+
+    render(
+        <StopPanel
+            stop={{...stop, photos: ["wtc/1", "wtc/2"]}}
+            dayColors={dayColors}
+            onClose={() => {}}
+        />,
+    )
+
+    const links = screen.getAllByRole("link")
+    expect(links).toHaveLength(2)
+    expect(links[0]).toHaveAttribute(
+        "href",
+        "https://imagedelivery.net/testhash/wtc/1/full",
+    )
+    expect(links[0]).toHaveAttribute("target", "_blank")
+
+    const image = screen.getAllByRole("img", {name: "World Trade Center"})[0]
+    expect(image).toHaveAttribute(
+        "src",
+        "https://imagedelivery.net/testhash/wtc/1/thumbnail",
+    )
+
+    vi.unstubAllEnvs()
+})
+
 test("closes via the close button", async () => {
     const onClose = vi.fn()
     const user = userEvent.setup()

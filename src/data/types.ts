@@ -13,6 +13,8 @@ export type Stop = {
     days: number[]
     notes?: string
     subwayLines?: string[]
+    // Cloudflare Images custom IDs (e.g. "macys/1"), in display order. The
+    // delivery URL is built by `createImageUrl` (see src/utils/images.ts).
     photos?: string[]
     labelSide?: LabelSide
 }

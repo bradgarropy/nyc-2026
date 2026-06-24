@@ -45,7 +45,8 @@
         "test:ui": "vitest --coverage --watch --ui",
         "test:watch": "vitest --coverage --watch",
         "test:e2e": "playwright test",
-        "test:e2e:ui": "playwright test --ui"
+        "test:e2e:ui": "playwright test --ui",
+        "photos": "node --env-file-if-exists=.env scripts/upload-photos.ts"
     },
     "dependencies": {
         "isbot": "^5.1.40",

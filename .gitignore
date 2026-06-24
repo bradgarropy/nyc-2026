@@ -21,5 +21,8 @@ worker-configuration.d.ts
 # secrets
 .env
 
+# local photo source files (uploaded to cloudflare images, not committed)
+/photos
+
 # os
 .DS_Store
