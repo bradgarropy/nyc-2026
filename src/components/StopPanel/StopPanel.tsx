@@ -136,13 +136,13 @@ const StopPanel = ({stop, dayColors, onClose}: StopPanelProps) => {
                                         href={createImageUrl(id, "full")}
                                         target="_blank"
                                         rel="noreferrer"
-                                        className="block rounded-lg focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-400"
+                                        className="block aspect-square overflow-hidden rounded-lg bg-gray-100 focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-400"
                                     >
                                         <img
                                             src={createImageUrl(id, "thumb")}
                                             alt={content.name}
                                             loading="lazy"
-                                            className="aspect-square w-full rounded-lg object-cover"
+                                            className="h-full w-full object-cover"
                                         />
                                     </a>
                                 ))}
