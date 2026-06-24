@@ -22,6 +22,7 @@ export const stops: Record<string, Stop> = {
         coord: {x: 14, y: 540},
         days: [1],
         notes: "Drove in from New Jersey through the tunnel and remembered the scene from Elf.",
+        photos: ["lincoln-tunnel/1", "lincoln-tunnel/2"],
     },
     "lga": {
         id: "lga",
@@ -29,6 +30,7 @@ export const stops: Record<string, Stop> = {
         coord: {x: 560, y: 360},
         days: [5],
         notes: "Super smooth airport experience. We loved the water show!",
+        photos: ["lga/1", "lga/2", "lga/3"],
     },
 
     // --- Day 1: Midtown & Times Square ---
@@ -38,6 +40,7 @@ export const stops: Record<string, Stop> = {
         coord: {x: 158, y: 548},
         days: [1],
         notes: "Checked out the toy section and celebrated the Knicks by shooting some hoops.",
+        photos: ["macys/1", "macys/2", "macys/3"],
     },
     "times-square": {
         id: "times-square",
@@ -45,6 +48,7 @@ export const stops: Record<string, Stop> = {
         coord: {x: 168, y: 518},
         days: [1],
         notes: "Dad got chosen as a guest in a street performance. Don't talk to the characters!",
+        photos: ["times-square/1", "times-square/2", "times-square/3"],
     },
     "disney-store": {
         id: "disney-store",
@@ -52,6 +56,7 @@ export const stops: Record<string, Stop> = {
         coord: {x: 178, y: 512},
         days: [1],
         notes: "Unfortunately, they didn't have a Bitzee.",
+        photos: ["disney-store/1", "disney-store/2", "disney-store/3"],
     },
     "mms-store": {
         id: "mms-store",
@@ -59,6 +64,7 @@ export const stops: Record<string, Stop> = {
         coord: {x: 172, y: 506},
         days: [1],
         notes: "Picked up some chocolate for the kids as we walked around.",
+        photos: ["mms-store/1", "mms-store/2", "mms-store/3"],
     },
     "rockefeller-center": {
         id: "rockefeller-center",
@@ -66,6 +72,11 @@ export const stops: Record<string, Stop> = {
         coord: {x: 230, y: 508},
         days: [1],
         notes: "Stopped here to plan dinner and gaze at our Nintendo toys.",
+        photos: [
+            "rockefeller-center/1",
+            "rockefeller-center/2",
+            "rockefeller-center/3",
+        ],
     },
     "nintendo-store": {
         id: "nintendo-store",
@@ -73,6 +84,7 @@ export const stops: Record<string, Stop> = {
         coord: {x: 212, y: 513},
         days: [1, 2],
         notes: "The highlight of the trip for the kids, who left with plenty of souveniers.",
+        photos: ["nintendo-store/1", "nintendo-store/2", "nintendo-store/3"],
     },
     "st-patricks": {
         id: "st-patricks",
@@ -80,6 +92,7 @@ export const stops: Record<string, Stop> = {
         coord: {x: 252, y: 505},
         days: [1],
         notes: "We lit a candle for Grandpa Dickie.",
+        photos: ["st-patricks/1", "st-patricks/2", "st-patricks/3"],
     },
     "lego-store": {
         id: "lego-store",
@@ -87,6 +100,7 @@ export const stops: Record<string, Stop> = {
         coord: {x: 244, y: 512},
         days: [1],
         notes: "Found some new LEGO sets to build, like the Luigi Mario Kart and the Slinky book end.",
+        photos: ["lego-store/1", "lego-store/2", "lego-store/3"],
     },
     "johns-pizza": {
         id: "johns-pizza",
@@ -94,6 +108,7 @@ export const stops: Record<string, Stop> = {
         coord: {x: 160, y: 512},
         days: [1],
         notes: "Pizza in a converted church. Desperately needed after covering a lot of ground.",
+        photos: ["johns-pizza/1", "johns-pizza/2", "johns-pizza/3"],
     },
 
     // --- Day 2: Downtown + Brooklyn ---
@@ -104,6 +119,7 @@ export const stops: Record<string, Stop> = {
         days: [2],
         notes: "Great views from the Cloudflare office on the 88th floor.",
         subwayLines: ["E"],
+        photos: ["wtc/1", "wtc/2", "wtc/3"],
     },
     "oculus": {
         id: "oculus",
@@ -111,6 +127,7 @@ export const stops: Record<string, Stop> = {
         coord: {x: 186, y: 830},
         days: [2, 4],
         notes: "Sick subway hub with great architecture. We stopped at Pop Mart twice for Labubus.",
+        photos: ["oculus/1", "oculus/2", "oculus/3"],
     },
     "ground-zero": {
         id: "ground-zero",
@@ -118,6 +135,7 @@ export const stops: Record<string, Stop> = {
         coord: {x: 158, y: 833},
         days: [2],
         notes: "Somber reminder amidst all the skyscrapers.",
+        photos: ["ground-zero/1", "ground-zero/2", "ground-zero/3"],
     },
     "brooklyn-bridge": {
         id: "brooklyn-bridge",
@@ -125,6 +143,7 @@ export const stops: Record<string, Stop> = {
         coord: {x: 395, y: 825},
         days: [2],
         notes: "Juju was super tired, so we took it slow. They don't allow locks anymore!",
+        photos: ["brooklyn-bridge/1", "brooklyn-bridge/2", "brooklyn-bridge/3"],
     },
     "pebble-beach": {
         id: "pebble-beach",
@@ -132,6 +151,7 @@ export const stops: Record<string, Stop> = {
         coord: {x: 460, y: 738},
         days: [2],
         notes: "Naturally passed by here walking through the promenade.",
+        photos: ["pebble-beach/1", "pebble-beach/2", "pebble-beach/3"],
     },
     "westville-dumbo": {
         id: "westville-dumbo",
@@ -139,6 +159,7 @@ export const stops: Record<string, Stop> = {
         coord: {x: 482, y: 775},
         days: [2],
         notes: "Great pit stop to wait out the rain. Juju got a second wind and our drinks were super strong!",
+        photos: ["westville-dumbo/1", "westville-dumbo/2", "westville-dumbo/3"],
     },
     "statue-liberty": {
         id: "statue-liberty",
@@ -146,6 +167,7 @@ export const stops: Record<string, Stop> = {
         coord: {x: 190, y: 955},
         days: [2],
         notes: "We took a very chilly ferry ride around the island which passed by lady liberty.",
+        photos: ["statue-liberty/1", "statue-liberty/2", "statue-liberty/3"],
     },
     "uss-intrepid": {
         id: "uss-intrepid",
@@ -153,6 +175,7 @@ export const stops: Record<string, Stop> = {
         coord: {x: 38, y: 515},
         days: [2],
         notes: "Walked right by this after exiting the ferry.",
+        photos: ["uss-intrepid/1", "uss-intrepid/2"],
     },
     "grand-central": {
         id: "grand-central",
@@ -160,6 +183,7 @@ export const stops: Record<string, Stop> = {
         coord: {x: 300, y: 520},
         days: [2],
         notes: "We quickly walked through here before getting street dogs. One of the dirtier subway hubs, but still pretty.",
+        photos: ["grand-central/1", "grand-central/2"],
     },
     "hot-dog-cart": {
         id: "hot-dog-cart",
@@ -167,6 +191,7 @@ export const stops: Record<string, Stop> = {
         coord: {x: 312, y: 526},
         days: [2],
         notes: "Juju and Dad loved their hot dogs.",
+        photos: ["hot-dog-cart/1"],
     },
 
     // --- Day 3: Central Park & Midtown & SoHo ---
@@ -176,6 +201,7 @@ export const stops: Record<string, Stop> = {
         coord: {x: 135, y: 532},
         days: [3],
         notes: "A classic NYC breakfast. Juju got the most colorful bagel you've ever seen.",
+        photos: ["liberty-bagels/1", "liberty-bagels/2", "liberty-bagels/3"],
     },
     "central-park-zoo": {
         id: "central-park-zoo",
@@ -184,6 +210,11 @@ export const stops: Record<string, Stop> = {
         days: [3],
         subwayLines: ["N"],
         notes: "Fairly small, but the sea lions in the center are super entertaining.",
+        photos: [
+            "central-park-zoo/1",
+            "central-park-zoo/2",
+            "central-park-zoo/3",
+        ],
     },
     "central-park": {
         id: "central-park",
@@ -191,6 +222,7 @@ export const stops: Record<string, Stop> = {
         coord: {x: 185, y: 425},
         days: [3],
         notes: "Strolled through the park and caught a bride and groom's first look.",
+        photos: ["central-park/1", "central-park/2", "central-park/3"],
     },
     "el-mitote": {
         id: "el-mitote",
@@ -198,6 +230,7 @@ export const stops: Record<string, Stop> = {
         coord: {x: 100, y: 425},
         days: [3],
         notes: "Stopped here for some familiar Mexican food after a great walk through the upper west side.",
+        photos: ["el-mitote/1", "el-mitote/2", "el-mitote/3"],
     },
     "apple-fifth": {
         id: "apple-fifth",
@@ -206,6 +239,7 @@ export const stops: Record<string, Stop> = {
         days: [3],
         subwayLines: ["1"],
         notes: "Great stop for us to rest in the air conditioning and for the kids to play some games.",
+        photos: ["apple-fifth/1", "apple-fifth/2", "apple-fifth/3"],
     },
     "368-broadway": {
         id: "368-broadway",
@@ -214,6 +248,7 @@ export const stops: Record<string, Stop> = {
         days: [3],
         notes: "We caught a quick glimpse of Casey Neistat riding away on his boosted board!",
         subwayLines: ["E"],
+        photos: ["368-broadway/1", "368-broadway/2", "368-broadway/3"],
     },
     "washington-square": {
         id: "washington-square",
@@ -222,6 +257,7 @@ export const stops: Record<string, Stop> = {
         days: [3],
         subwayLines: ["N"],
         notes: "Little too much weed for the kids.",
+        photos: ["washington-square/1"],
     },
     "the-cage": {
         id: "the-cage",
@@ -246,6 +282,7 @@ export const stops: Record<string, Stop> = {
         coord: {x: 110, y: 535},
         days: [4],
         notes: "More gear than I've ever seen. We got to see the conveyor belts working!",
+        photos: ["bh-photo/1"],
     },
     "vessel": {
         id: "vessel",
@@ -253,6 +290,7 @@ export const stops: Record<string, Stop> = {
         coord: {x: 74, y: 553},
         days: [4],
         notes: "Outside of a high end mall alongside some World Cup festivities.",
+        photos: ["vessel/1", "vessel/2", "vessel/3"],
     },
     "hudson-yards": {
         id: "hudson-yards",
@@ -260,6 +298,7 @@ export const stops: Record<string, Stop> = {
         coord: {x: 60, y: 545},
         days: [4],
         notes: "Showed the kids the train yard.",
+        photos: ["hudson-yards/1", "hudson-yards/2", "hudson-yards/3"],
     },
     "high-line": {
         id: "high-line",
@@ -267,6 +306,7 @@ export const stops: Record<string, Stop> = {
         coord: {x: 70, y: 618},
         days: [4],
         notes: "Super fun walk with great smells of the flowers and views of the buildings.",
+        photos: ["high-line/1", "high-line/2", "high-line/3"],
     },
     "chelsea-market": {
         id: "chelsea-market",
@@ -274,6 +314,7 @@ export const stops: Record<string, Stop> = {
         coord: {x: 108, y: 595},
         days: [4],
         notes: "Got lunch and chocolates after walking the High Line.",
+        photos: ["chelsea-market/1", "chelsea-market/2", "chelsea-market/3"],
     },
     "little-island": {
         id: "little-island",
@@ -281,6 +322,7 @@ export const stops: Record<string, Stop> = {
         coord: {x: 58, y: 632},
         days: [4],
         notes: "Covered every inch of this small park.",
+        photos: ["little-island/1", "little-island/2", "little-island/3"],
     },
     "chinatown": {
         id: "chinatown",
@@ -289,6 +331,7 @@ export const stops: Record<string, Stop> = {
         days: [4],
         subwayLines: ["A", "B"],
         notes: "Saw cooked ducks and met some nice people who let us try their bao.",
+        photos: ["chinatown/1", "chinatown/2", "chinatown/3"],
     },
     "nyse": {
         id: "nyse",
@@ -297,6 +340,7 @@ export const stops: Record<string, Stop> = {
         days: [4],
         subwayLines: ["J"],
         notes: "Quickly walked through the financial district.",
+        photos: ["nyse/1"],
     },
     "wall-street": {
         id: "wall-street",
@@ -304,6 +348,7 @@ export const stops: Record<string, Stop> = {
         coord: {x: 240, y: 858},
         days: [4],
         notes: "This was surprisingly busy.",
+        photos: ["wall-street/1", "wall-street/2"],
     },
     "pizza-suprema": {
         id: "pizza-suprema",
@@ -312,6 +357,7 @@ export const stops: Record<string, Stop> = {
         days: [4],
         notes: "Packed pizza place that was really good!",
         subwayLines: ["E"],
+        photos: ["pizza-suprema/1", "pizza-suprema/2", "pizza-suprema/3"],
     },
     "madison-square-garden": {
         id: "madison-square-garden",
@@ -319,6 +365,11 @@ export const stops: Record<string, Stop> = {
         coord: {x: 128, y: 555},
         days: [4],
         notes: "Buzzing all week due to the Knicks championship.",
+        photos: [
+            "madison-square-garden/1",
+            "madison-square-garden/2",
+            "madison-square-garden/3",
+        ],
     },
     "penn-station": {
         id: "penn-station",
@@ -326,5 +377,6 @@ export const stops: Record<string, Stop> = {
         coord: {x: 138, y: 558},
         days: [4],
         notes: "Another major subway hub where we got ice cream and walked around Madison Square Garden.",
+        photos: ["penn-station/1", "penn-station/2", "penn-station/3"],
     },
 }
