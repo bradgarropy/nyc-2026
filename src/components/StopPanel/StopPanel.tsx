@@ -20,6 +20,9 @@ const DARK_TEXT_LINES = new Set(["N", "Q", "R", "W", "L", "S"])
 // its content remains visible while the panel slides closed.
 const StopPanel = ({stop, dayColors, onClose}: StopPanelProps) => {
     const closeRef = useRef<HTMLButtonElement>(null)
+    // The element that opened the panel — a day-card <button> (HTMLElement) or a
+    // map dot <g> (SVGElement); both are focusable.
+    const triggerRef = useRef<HTMLElement | SVGElement | null>(null)
     const [lastStop, setLastStop] = useState<Stop | null>(stop)
     const open = stop !== null
     const content = stop ?? lastStop
@@ -30,12 +33,28 @@ const StopPanel = ({stop, dayColors, onClose}: StopPanelProps) => {
         }
     }, [stop])
 
+    // Move focus into the panel on open, and return it to whatever opened the
+    // panel (a map dot or a day-card button) on close. Keyed on `open` only so
+    // the captured trigger isn't overwritten on unrelated re-renders.
     useEffect(() => {
         if (!open) {
             return
         }
 
+        const active = document.activeElement
+        triggerRef.current =
+            active instanceof HTMLElement || active instanceof SVGElement
+                ? active
+                : null
         closeRef.current?.focus()
+
+        return () => triggerRef.current?.focus()
+    }, [open])
+
+    useEffect(() => {
+        if (!open) {
+            return
+        }
 
         const onKeyDown = (event: KeyboardEvent) => {
             if (event.key === "Escape") {
@@ -61,7 +80,7 @@ const StopPanel = ({stop, dayColors, onClose}: StopPanelProps) => {
                 tabIndex={-1}
                 aria-label="Close"
                 onClick={onClose}
-                className={`absolute inset-0 h-full w-full cursor-default bg-black/40 transition-opacity duration-300 ${
+                className={`absolute inset-0 h-full w-full cursor-default bg-black/40 transition-opacity duration-300 motion-reduce:transition-none ${
                     open ? "opacity-100" : "opacity-0"
                 }`}
             />
@@ -70,7 +89,7 @@ const StopPanel = ({stop, dayColors, onClose}: StopPanelProps) => {
                 role="dialog"
                 aria-modal="true"
                 aria-labelledby="stop-panel-title"
-                className={`font-helvetica absolute inset-x-0 bottom-0 flex max-h-[85dvh] flex-col overflow-hidden rounded-t-2xl bg-white shadow-xl transition duration-300 ease-out sm:inset-x-auto sm:inset-y-0 sm:right-0 sm:max-h-none sm:w-[26rem] sm:rounded-none ${
+                className={`font-helvetica absolute inset-x-0 bottom-0 flex max-h-[85dvh] flex-col overflow-hidden rounded-t-2xl bg-white shadow-xl transition duration-300 ease-out motion-reduce:transition-none sm:inset-x-auto sm:inset-y-0 sm:right-0 sm:max-h-none sm:w-[26rem] sm:rounded-none ${
                     open
                         ? "translate-x-0 translate-y-0 opacity-100"
                         : "translate-y-full opacity-0 sm:translate-x-full sm:translate-y-0"

@@ -130,6 +130,8 @@ const DayItinerary = ({
                                             onHoverStop?.(stop.id)
                                         }
                                         onMouseLeave={() => onHoverStop?.(null)}
+                                        onFocus={() => onHoverStop?.(stop.id)}
+                                        onBlur={() => onHoverStop?.(null)}
                                         className="cursor-pointer rounded text-left text-sm font-semibold text-[#1a1a1a] focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-400"
                                     >
                                         {stop.name}

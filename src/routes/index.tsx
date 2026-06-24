@@ -11,6 +11,7 @@ import StopPanel from "~/components/StopPanel"
 import TripMap from "~/components/TripMap"
 import {trip} from "~/data/trip"
 import type {Stop} from "~/data/types"
+import {visitOrderedStops} from "~/utils/trip"
 
 const Route = () => {
     const {days, stops} = trip
@@ -22,6 +23,9 @@ const Route = () => {
         days.map(day => [day.id, day.color]),
     ) as Record<number, string>
 
+    // Map dots render (and so keyboard-tab) in the order we visited them.
+    const orderedStops = visitOrderedStops(days, stops)
+
     const isDayDimmed = (id: number) =>
         selectedDay !== null && id !== selectedDay
 
@@ -32,7 +36,13 @@ const Route = () => {
         <>
             <title>nyc 2026</title>
 
-            <div className="mx-auto flex max-w-5xl flex-col gap-6 lg:grid lg:grid-cols-2 lg:grid-rows-[auto_auto] lg:gap-x-6 lg:gap-y-4">
+            {/* While the stop panel is open it acts as a modal: the rest of the
+                page is made inert so it's non-interactive and hidden from
+                assistive tech. */}
+            <div
+                inert={selectedStop !== null}
+                className="mx-auto flex max-w-5xl flex-col gap-6 lg:grid lg:grid-cols-2 lg:grid-rows-[auto_auto] lg:gap-x-6 lg:gap-y-4"
+            >
                 {/* filter: top-left, above the map only; bottom-aligned so it
                     sits flush with the legend across the row */}
                 <div className="lg:col-start-1 lg:row-start-1 lg:flex lg:items-end">
@@ -63,7 +73,7 @@ const Route = () => {
                             />
                         ))}
 
-                        {Object.values(stops).map(stop => {
+                        {orderedStops.map(stop => {
                             const dimmed = isStopDimmed(stop.days)
 
                             return (

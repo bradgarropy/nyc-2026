@@ -1,6 +1,6 @@
 // Trip-related helpers — see plan.md for the design.
 
-import type {TransitMode} from "~/data/types"
+import type {Day, Stop, TransitMode} from "~/data/types"
 
 // Maps a subway line (its letter/number) to its MTA trunk-line color token.
 const LINE_GROUPS: [string, string[]][] = [
@@ -32,6 +32,35 @@ const LIGHT_COLORS = new Set(["var(--color-mta-yellow)"])
 // The legible text color ("#1a1a1a" or "white") to use on top of a given fill.
 export const textColorOn = (color: string): string =>
     LIGHT_COLORS.has(color) ? "#1a1a1a" : "white"
+
+// Unique stops in the order they were first visited across the trip (day order,
+// then each day's route order). Drives the map's keyboard tab order so it
+// follows the trip. Any stop not on a route is appended at the end.
+export const visitOrderedStops = (
+    days: Day[],
+    stops: Record<string, Stop>,
+): Stop[] => {
+    const seen = new Set<string>()
+    const ordered: Stop[] = []
+
+    for (const day of days) {
+        for (const id of day.route) {
+            const stop = stops[id]
+            if (stop && !seen.has(id)) {
+                seen.add(id)
+                ordered.push(stop)
+            }
+        }
+    }
+
+    for (const stop of Object.values(stops)) {
+        if (!seen.has(stop.id)) {
+            ordered.push(stop)
+        }
+    }
+
+    return ordered
+}
 
 // Each transit mode renders with a distinct line style so the way we got
 // between stops is easy to read. Values are SVG `stroke-dasharray` (undefined =

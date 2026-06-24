@@ -97,6 +97,25 @@ test("reports hovered stop id on mouse enter/leave", async () => {
     expect(onHoverStop).toHaveBeenLastCalledWith(null)
 })
 
+test("reports hovered stop id on keyboard focus/blur", () => {
+    const onHoverStop = vi.fn()
+    render(
+        <DayItinerary
+            day={day}
+            stops={stops}
+            onSelectStop={() => {}}
+            onHoverStop={onHoverStop}
+        />,
+    )
+
+    const button = screen.getByRole("button", {name: "Times Square"})
+    button.focus()
+    expect(onHoverStop).toHaveBeenLastCalledWith("times-square")
+
+    button.blur()
+    expect(onHoverStop).toHaveBeenLastCalledWith(null)
+})
+
 test("renders stop names as plain text when not selectable", () => {
     render(<DayItinerary day={day} stops={stops} />)
 

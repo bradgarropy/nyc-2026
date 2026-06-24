@@ -24,7 +24,7 @@ const StopNode = ({stop, color, hovered}: StopNodeProps) => {
             stroke={color}
             strokeWidth={2}
             data-hovered={hovered ? "true" : undefined}
-            className={`origin-center transition-transform duration-150 group-hover:scale-[1.4] group-focus-within:scale-[1.4] ${
+            className={`origin-center transition-transform duration-150 group-hover:scale-[1.4] group-focus-within:scale-[1.4] motion-reduce:transition-none ${
                 hovered ? "scale-[1.4]" : ""
             }`}
             style={{transformBox: "fill-box"}}

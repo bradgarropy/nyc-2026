@@ -31,7 +31,7 @@ const StopLabel = ({stop, hovered}: StopLabelProps) => {
             y={y}
             textAnchor={isLeft ? "end" : "start"}
             dominantBaseline="middle"
-            className={`font-helvetica pointer-events-none fill-[#1a1a1a] text-[11px] font-semibold transition-opacity duration-150 group-hover:opacity-100 group-focus-within:opacity-100 ${
+            className={`font-helvetica pointer-events-none fill-[#1a1a1a] text-[11px] font-semibold transition-opacity duration-150 group-hover:opacity-100 group-focus-within:opacity-100 motion-reduce:transition-none ${
                 hovered ? "opacity-100" : "opacity-0"
             }`}
             style={{

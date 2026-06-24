@@ -76,6 +76,35 @@ test("closes via the close button", async () => {
     expect(onClose).toHaveBeenCalledOnce()
 })
 
+test("returns focus to the triggering element when closed", () => {
+    const {rerender} = render(
+        <>
+            <button>open</button>
+            <StopPanel stop={null} dayColors={dayColors} onClose={() => {}} />
+        </>,
+    )
+
+    const trigger = screen.getByRole("button", {name: "open"})
+    trigger.focus()
+    expect(trigger).toHaveFocus()
+
+    rerender(
+        <>
+            <button>open</button>
+            <StopPanel stop={stop} dayColors={dayColors} onClose={() => {}} />
+        </>,
+    )
+    expect(screen.getByRole("button", {name: "Close panel"})).toHaveFocus()
+
+    rerender(
+        <>
+            <button>open</button>
+            <StopPanel stop={null} dayColors={dayColors} onClose={() => {}} />
+        </>,
+    )
+    expect(trigger).toHaveFocus()
+})
+
 test("closes on Escape", async () => {
     const onClose = vi.fn()
     const user = userEvent.setup()

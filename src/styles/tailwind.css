@@ -83,3 +83,12 @@
     animation-name: nyc-fade-out;
     animation-range: calc(100% - 4rem) 100%;
 }
+
+/* Respect reduced-motion: drop the scroll-driven fades entirely. */
+@media (prefers-reduced-motion: reduce) {
+    .day-list-fade-top,
+    .day-list-fade-bottom {
+        animation: none;
+        display: none;
+    }
+}
