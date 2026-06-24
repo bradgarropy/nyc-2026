@@ -16,11 +16,17 @@ import {readdirSync, readFileSync, statSync, writeFileSync} from "node:fs"
 import {basename, extname, join} from "node:path"
 import process from "node:process"
 
+import pLimit from "p-limit"
+
 const ACCOUNT_ID = process.env.CLOUDFLARE_ACCOUNT_ID
 const TOKEN = process.env.CLOUDFLARE_IMAGES_TOKEN
 const SRC_DIR = "photos"
 const STOPS_FILE = "src/data/stops.ts"
 const API = `https://api.cloudflare.com/client/v4/accounts/${ACCOUNT_ID}/images/v1`
+
+// How many uploads to run at once. Cloudflare's API comfortably handles this,
+// and it's the main speedup over uploading one image at a time.
+const CONCURRENCY = 8
 
 const IMAGE_EXTENSIONS = new Set([".jpg", ".jpeg", ".png", ".webp"])
 
@@ -64,6 +70,9 @@ const listPhotos = (stopId: string): string[] =>
         .filter(file => IMAGE_EXTENSIONS.has(extname(file).toLowerCase()))
         .sort()
 
+type ApiError = {code?: number; message?: string}
+type ApiResponse = {success?: boolean; errors?: ApiError[]}
+
 const deleteImage = async (id: string): Promise<void> => {
     const res = await fetch(`${API}/${encodeURIComponent(id)}`, {
         method: "DELETE",
@@ -77,15 +86,34 @@ const deleteImage = async (id: string): Promise<void> => {
     }
 }
 
-const uploadImage = async (id: string, filePath: string): Promise<void> => {
+const postImage = (id: string, filePath: string): Promise<Response> => {
     const form = new FormData()
     const bytes = readFileSync(filePath)
     form.append("file", new Blob([new Uint8Array(bytes)]), basename(filePath))
     form.append("id", id)
     form.append("requireSignedURLs", "false")
 
-    const res = await fetch(API, {method: "POST", headers, body: form})
-    const json = (await res.json()) as {success?: boolean; errors?: unknown}
+    return fetch(API, {method: "POST", headers, body: form})
+}
+
+const isConflict = (res: Response, json: ApiResponse): boolean =>
+    res.status === 409 ||
+    (json.errors?.some(
+        error => error.code === 5409 || /exist/i.test(error.message ?? ""),
+    ) ??
+        false)
+
+// Upload first; only if the custom ID already exists do we delete and retry.
+// This avoids a wasted DELETE round-trip on every (first-run) upload.
+const uploadImage = async (id: string, filePath: string): Promise<void> => {
+    let res = await postImage(id, filePath)
+    let json = (await res.json()) as ApiResponse
+
+    if (!json.success && isConflict(res, json)) {
+        await deleteImage(id)
+        res = await postImage(id, filePath)
+        json = (await res.json()) as ApiResponse
+    }
 
     if (!res.ok || !json.success) {
         throw new Error(
@@ -121,10 +149,16 @@ const writePhotos = (source: string, stopId: string, ids: string[]): string => {
     return lines.join("\n")
 }
 
+type UploadTask = {id: string; file: string; filePath: string}
+
 const main = async (): Promise<void> => {
     const dirs = listImageDirs()
-    let source = stopsSource
-    let uploaded = 0
+
+    // Build the full upload list up front. IDs are deterministic
+    // ("<stop-id>/<n>" in alphabetical order), so we know each stop's `photos`
+    // array regardless of the order uploads finish in.
+    const tasks: UploadTask[] = []
+    const stopPhotos = new Map<string, string[]>()
 
     for (const stopId of dirs) {
         if (!validStopIds.has(stopId)) {
@@ -137,16 +171,28 @@ const main = async (): Promise<void> => {
             continue
         }
 
-        const ids: string[] = []
-        for (const [index, file] of files.entries()) {
+        const ids = files.map((file, index) => {
             const id = `${stopId}/${index + 1}`
-            await deleteImage(id)
-            await uploadImage(id, join(SRC_DIR, stopId, file))
-            ids.push(id)
-            uploaded += 1
-            console.log(`✓ ${id}  (${file})`)
-        }
+            tasks.push({id, file, filePath: join(SRC_DIR, stopId, file)})
+            return id
+        })
+        stopPhotos.set(stopId, ids)
+    }
 
+    const limit = pLimit(CONCURRENCY)
+    let done = 0
+    await Promise.all(
+        tasks.map(({id, file, filePath}) =>
+            limit(async () => {
+                await uploadImage(id, filePath)
+                done += 1
+                console.log(`✓ [${done}/${tasks.length}] ${id}  (${file})`)
+            }),
+        ),
+    )
+
+    let source = stopsSource
+    for (const [stopId, ids] of stopPhotos) {
         source = writePhotos(source, stopId, ids)
     }
 
@@ -155,7 +201,7 @@ const main = async (): Promise<void> => {
         execSync(`npx prettier --write ${STOPS_FILE}`, {stdio: "inherit"})
     }
 
-    console.log(`\nDone — uploaded ${uploaded} image(s).`)
+    console.log(`\nDone — uploaded ${tasks.length} image(s).`)
 }
 
 main().catch((error: unknown) => {
