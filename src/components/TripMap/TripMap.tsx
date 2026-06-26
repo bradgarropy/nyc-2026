@@ -5,6 +5,12 @@ import type {ReactNode} from "react"
 // that aspect ratio.
 export const MAP_WIDTH = 658
 export const MAP_HEIGHT = 1269
+const MAP_VIEWBOX = {
+    x: 0,
+    y: 275,
+    width: 610,
+    height: 800,
+}
 
 type TripMapProps = {
     children?: ReactNode
@@ -13,7 +19,7 @@ type TripMapProps = {
 const TripMap = ({children}: TripMapProps) => {
     return (
         <svg
-            viewBox={`0 0 ${MAP_WIDTH} ${MAP_HEIGHT}`}
+            viewBox={`${MAP_VIEWBOX.x} ${MAP_VIEWBOX.y} ${MAP_VIEWBOX.width} ${MAP_VIEWBOX.height}`}
             preserveAspectRatio="xMidYMid meet"
             role="img"
             aria-label="NYC 2026 trip map"
