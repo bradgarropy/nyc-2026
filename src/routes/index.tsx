@@ -32,6 +32,13 @@ const Route = () => {
     const isStopDimmed = (stopDays: number[]) =>
         selectedDay !== null && !stopDays.includes(selectedDay)
 
+    const activeStopId = selectedStop?.id ?? hoveredStopId
+    const activeStopCandidate = activeStopId ? stops[activeStopId] : null
+    const activeStop =
+        activeStopCandidate && !isStopDimmed(activeStopCandidate.days)
+            ? activeStopCandidate
+            : null
+
     return (
         <>
             <title>nyc 2026</title>
@@ -90,6 +97,26 @@ const Route = () => {
                                             ? undefined
                                             : () => setSelectedStop(stop)
                                     }
+                                    onMouseEnter={
+                                        dimmed
+                                            ? undefined
+                                            : () => setHoveredStopId(stop.id)
+                                    }
+                                    onMouseLeave={
+                                        dimmed
+                                            ? undefined
+                                            : () => setHoveredStopId(null)
+                                    }
+                                    onFocus={
+                                        dimmed
+                                            ? undefined
+                                            : () => setHoveredStopId(stop.id)
+                                    }
+                                    onBlur={
+                                        dimmed
+                                            ? undefined
+                                            : () => setHoveredStopId(null)
+                                    }
                                     onKeyDown={
                                         dimmed
                                             ? undefined
@@ -122,6 +149,21 @@ const Route = () => {
                                 </g>
                             )
                         })}
+
+                        {activeStop ? (
+                            <g
+                                aria-hidden="true"
+                                pointerEvents="none"
+                                className="group"
+                            >
+                                <StopNode
+                                    stop={activeStop}
+                                    color={dayColors[activeStop.days[0]]}
+                                    hovered
+                                />
+                                <StopLabel stop={activeStop} hovered />
+                            </g>
+                        ) : null}
                     </TripMap>
                 </div>
 
