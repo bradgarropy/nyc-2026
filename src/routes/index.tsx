@@ -4,6 +4,7 @@ import BaseMap from "~/components/BaseMap"
 import DayFilter from "~/components/DayFilter"
 import DayLine from "~/components/DayLine"
 import DayList from "~/components/DayList"
+import Footer from "~/components/Footer"
 import Legend from "~/components/Legend"
 import StopLabel from "~/components/StopLabel"
 import StopNode from "~/components/StopNode"
@@ -53,7 +54,7 @@ const Route = () => {
                 assistive tech. */}
             <div
                 inert={selectedStop !== null}
-                className="mx-auto flex max-w-5xl flex-col gap-6 lg:grid lg:grid-cols-2 lg:grid-rows-[auto_auto] lg:gap-x-6 lg:gap-y-6"
+                className="mx-auto flex max-w-6xl flex-col gap-6 lg:grid lg:grid-cols-2 lg:grid-rows-[auto_auto] lg:gap-x-6 lg:gap-y-6"
             >
                 {/* filter: top-left, above the map only; bottom-aligned so it
                     sits flush with the legend across the row */}
@@ -214,6 +215,8 @@ const Route = () => {
                 dayColors={dayColors}
                 onClose={() => setSelectedStop(null)}
             />
+
+            <Footer />
         </>
     )
 }

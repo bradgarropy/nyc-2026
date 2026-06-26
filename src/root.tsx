@@ -1,7 +1,6 @@
 import {Links, Meta, Outlet, Scripts, ScrollRestoration} from "react-router"
 
 import Error from "~/components/ErrorBoundary"
-import Footer from "~/components/Footer"
 import Header from "~/components/Header"
 import tailwindStyles from "~/styles/tailwind.css?url"
 
@@ -29,14 +28,12 @@ const App = () => {
             </head>
 
             <body className="bg-white text-black">
-                <div className="grid min-h-screen grid-rows-[auto_1fr_auto]">
+                <div className="min-h-screen">
                     <Header />
 
                     <div className="p-8">
                         <Outlet />
                     </div>
-
-                    <Footer />
                 </div>
 
                 <ScrollRestoration />
