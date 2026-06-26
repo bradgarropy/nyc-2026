@@ -32,6 +32,11 @@ const Route = () => {
     const isStopDimmed = (stopDays: number[]) =>
         selectedDay !== null && !stopDays.includes(selectedDay)
 
+    const stopColor = (stop: Stop) =>
+        selectedDay !== null && stop.days.includes(selectedDay)
+            ? dayColors[selectedDay]
+            : dayColors[stop.days[0]]
+
     const activeStopId = selectedStop?.id ?? hoveredStopId
     const activeStopCandidate = activeStopId ? stops[activeStopId] : null
     const activeStop =
@@ -139,7 +144,7 @@ const Route = () => {
                                 >
                                     <StopNode
                                         stop={stop}
-                                        color={dayColors[stop.days[0]]}
+                                        color={stopColor(stop)}
                                         hovered={hoveredStopId === stop.id}
                                     />
                                     <StopLabel
@@ -158,7 +163,7 @@ const Route = () => {
                             >
                                 <StopNode
                                     stop={activeStop}
-                                    color={dayColors[activeStop.days[0]]}
+                                    color={stopColor(activeStop)}
                                     hovered
                                 />
                                 <StopLabel stop={activeStop} hovered />
