@@ -2,7 +2,7 @@ import {MAP_WIDTH} from "~/components/TripMap/TripMap"
 import type {LabelSide, Stop} from "~/data/types"
 
 // Distance from the dot center to the start of the label text.
-const OFFSET = 11
+const OFFSET = 13
 
 // Auto-pick a side from the stop's x so labels lean toward the interior (and
 // off the map edges); `stop.labelSide` overrides for crowded spots.
@@ -31,13 +31,13 @@ const StopLabel = ({stop, hovered}: StopLabelProps) => {
             y={y}
             textAnchor={isLeft ? "end" : "start"}
             dominantBaseline="middle"
-            className={`font-helvetica pointer-events-none fill-[#1a1a1a] text-[11px] font-semibold transition-opacity duration-150 group-hover:opacity-100 group-focus-within:opacity-100 motion-reduce:transition-none ${
+            className={`font-helvetica pointer-events-none fill-[#1a1a1a] text-[16px] font-semibold transition-opacity duration-150 group-hover:opacity-100 group-focus-within:opacity-100 motion-reduce:transition-none ${
                 hovered ? "opacity-100" : "opacity-0"
             }`}
             style={{
                 paintOrder: "stroke",
                 stroke: "white",
-                strokeWidth: 3,
+                strokeWidth: 5,
                 strokeLinejoin: "round",
             }}
         >

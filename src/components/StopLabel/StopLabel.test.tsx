@@ -57,7 +57,7 @@ test("a west-side stop labels to the right", () => {
 
     const text = container.querySelector("text")
     expect(text).toHaveAttribute("text-anchor", "start")
-    expect(text).toHaveAttribute("x", "111") // 100 + offset
+    expect(text).toHaveAttribute("x", "113") // 100 + offset
 })
 
 test("an east-side stop labels to the left", () => {
@@ -69,7 +69,7 @@ test("an east-side stop labels to the left", () => {
 
     const text = container.querySelector("text")
     expect(text).toHaveAttribute("text-anchor", "end")
-    expect(text).toHaveAttribute("x", "489") // 500 - offset
+    expect(text).toHaveAttribute("x", "487") // 500 - offset
 })
 
 test("labelSide overrides the automatic side", () => {
