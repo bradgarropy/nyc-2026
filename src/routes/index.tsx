@@ -53,7 +53,7 @@ const Route = () => {
                 assistive tech. */}
             <div
                 inert={selectedStop !== null}
-                className="mx-auto flex max-w-5xl flex-col gap-6 lg:grid lg:grid-cols-2 lg:grid-rows-[auto_auto] lg:gap-x-6 lg:gap-y-4"
+                className="mx-auto flex max-w-5xl flex-col gap-6 lg:grid lg:grid-cols-2 lg:grid-rows-[auto_auto] lg:gap-x-6 lg:gap-y-6"
             >
                 {/* filter: top-left, above the map only; bottom-aligned so it
                     sits flush with the legend across the row */}
