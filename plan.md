@@ -5,373 +5,353 @@ colored "line", each stop is clickable, and you can filter by day. The goal is a
 stylized keepsake that feels like it could hang in the Transit Museum gift
 shop — not a Google Maps timeline.
 
+**Status:** shipped and live at **https://nyc.bradgarropy.com**. Core build,
+photos, deploy, and an accessibility pass are done. Remaining work is visual
+polish (see §15). For day-to-day handoff state, see `session.md`.
+
 ---
 
 ## 1. concept
 
 - A simplified, stylized NYC subway map (MTA-_inspired_, not copied).
 - Each **day is a colored subway line**, routed through that day's stops in order.
-- Lines are drawn MTA-style: thick strokes, 45° angled segments, rounded joins,
-  white "bulb" station dots.
+- Lines are drawn MTA-style: thick strokes, octilinear (90°/45°) segments,
+  rounded joins, white "bulb" station dots.
 - The **Hotel is the central transfer hub** — every day's line passes through it.
-- Stops that recur across days (Hotel, Rockefeller Center, Nintendo Store,
-  Oculus) render as **transfer stations** (a single larger node with multiple
-  colored lines passing through), exactly like a real interchange.
-- Clicking a stop opens a detail panel: photos, notes, subway lines
-  used, and notes.
-- A **day filter** (All / Day 1–4) highlights one line and dims the rest.
+- Stops visited on more than one day (Hotel, Oculus, Nintendo Store) render as a
+  **single node** with each day's colored line passing through — like a real
+  interchange.
+- Clicking a stop opens a detail panel: photos, notes, and the subway line(s) we
+  took to get there.
+- A **day filter** (All / Day 1–5) highlights one line and dims the rest.
 - The trip was **5 days / 4 nights**. The drive in through the **Lincoln Tunnel**
   is the start of **Day 1** (not a separate day); **Day 5** is the departure to
-  **LGA**, a travel-only day excluded from the filter.
+  the airport.
 - **Transit modes have distinct line styles** so it's easy to tell how we got
   between stops: walk (dotted), subway (solid), ferry (dashed), car (dash-dot).
-  The car style covers the Lincoln Tunnel arrival and LGA departure.
+  The car style covers the Lincoln Tunnel arrival and the airport departure.
 - v1 is a **static, fit-to-screen poster** with clickable stops. Pan/zoom and a
-  line draw-on animation are planned later (see Future enhancements).
+  line draw-on animation are possible later (see §15).
 
 ---
 
-## 2. tech stack (already scaffolded)
+## 2. tech stack
 
-- **React Router v7** (SSR) on **Cloudflare Workers** — from `react-router-starter`.
+- **React Router v7** (SSR) on **Cloudflare Workers**, via `@cloudflare/vite-plugin`.
 - **TypeScript**, **Tailwind v4**, **Vitest**, **Playwright**.
-- `@bradgarropy/eslint-config`, Prettier (4-space, no-semi, double-quote).
-- Single page: the index route (`src/routes/index.tsx`) renders the whole map.
+- `@bradgarropy/eslint-config`, Prettier (4-space, no-semi, double-quote,
+  trailing-comma all). `~/*` path alias.
+- Single page: the index route (`src/routes/index.tsx`) renders the whole map +
+  itinerary.
 - Map is **hand-authored inline SVG** — no map/charting library. Hand-placed
-  coordinates give us full control over the schematic look.
-- Sentry and `react-router-devtools` were removed during scaffolding.
+  coordinates give full control over the schematic look.
+- Deployed via **Cloudflare Workers Builds** (git-connected, auto-deploy on push
+  to `main`) to the custom domain **nyc.bradgarropy.com**. See §10.
 
 ---
 
 ## 3. the trip (source data)
 
-Legend: `[mode]` = transit between stops · `hub` = recurring transfer station.
+Modes are per-segment: `[car]`, `[walk]`, `[ferry]`, `[subway:LINE]`. Subway lines
+shown are the lines we rode to reach the next stop.
 
-### Day 1 — Tue, Jun 16 · Midtown / Times Square · 🔴 line
+### Day 1 — Tue, Jun 16 · Midtown & Times Square · blue line
 
-Lincoln Tunnel 🚗 → `[car]` → Hotel (hub) → Times Square → LEGO Store →
-Nintendo Store (hub) → Rockefeller Center (hub) → FAO Schwarz →
-St. Patrick's Cathedral (outside) → Grand Central Terminal →
-Grand Central Hot Dog Cart → Hotel (hub)
+Lincoln Tunnel `[car]` → Hotel → Macy's → Times Square → Disney Store →
+M&M's Store → Rockefeller Center → Nintendo Store → St. Patrick's Cathedral →
+LEGO Store → John's of Times Square → Hotel. (Arrival drive in, then all walking.)
 
-_(The day opens with the drive in through the Lincoln Tunnel — that first `car`
-segment is dash-dot styled, but it's part of the red Day 1 line, not a separate
-day.)_
+### Day 2 — Wed, Jun 17 · Downtown & Brooklyn · yellow line
 
-### Day 2 — Wed, Jun 17 · Downtown + Brooklyn · 🔵 line (rode the E)
+Hotel `[subway: E]` → World Trade Center (the Cloudflare office) → Ground Zero →
+Oculus → Brooklyn Bridge → Westville DUMBO → Pebble Beach →
+`[ferry]` Statue of Liberty → `[ferry]` USS Intrepid → Nintendo Store →
+Grand Central Terminal → Grand Central Hot Dog Cart → Hotel.
 
-Hotel (hub) → [E train] → Cloudflare Office → Oculus (hub) → Ground Zero →
-World Trade Center → [walk] → Brooklyn Bridge → [walk] →
-Washington Street (Manhattan Bridge photo) → Pebble Beach → Westville DUMBO →
-Jane's Carousel → [ferry] → Statue of Liberty → Pier 79 →
-Rockefeller Center (hub) → Nintendo Store (hub) → Hotel (hub)
+### Day 3 — Thu, Jun 18 · Central Park & Midtown & SoHo · orange line
 
-### Day 3 — Thu, Jun 18 · Central Park + Midtown + SoHo · 🟢 line
+Hotel → Liberty Bagels `[subway: N]` → Central Park Zoo → Central Park →
+El Mitote `[subway: 1]` → Apple Fifth Avenue `[subway: N]` → Washington Square Park
+→ The Cage `[subway: E]` → 368 Broadway `[subway: E]` → Burgerology → Hotel.
 
-Hotel (hub) → Central Park Zoo → Central Park → El Mitote →
-Apple Fifth Avenue → 368 Broadway → Washington Square Park → Hotel (hub)
+### Day 4 — Fri, Jun 19 · West Side & Chinatown · red line
 
-### Day 4 — Fri, Jun 19 · West Side + Chinatown · 🟠 line
+Hotel → B&H Photo → Vessel → Hudson Yards → High Line → Chelsea Market →
+Little Island `[subway]` → Chinatown `[subway: A, B]` → New York Stock Exchange
+`[subway: J]` → Wall Street Bull → Oculus `[subway: E]` → NY Pizza Suprema →
+Madison Square Garden → Penn Station → Hotel.
 
-Hotel (hub) → Hudson Yards → Vessel → High Line → Chelsea Market →
-Little Island → Chinatown → Pell Street → Doyers Street → Mott Street →
-Bubble Tea → Dumplings → Wall Street → NYSE → Oculus (hub) →
-Pop Mart → Hotel (hub) → Pizza Suprema
+### Day 5 — Sat, Jun 20 · Departure · brown line
 
-_(Friends Apartment was on the original list but we skipped it — omitted.)_
-
-### Day 5 — Sat, Jun 20 · Departure — LGA · ⚪ travel
-
-Hotel → `[car]` → LGA ✈ → Houston → Austin.
-A **travel-only day** (`travel: true`): drawn as a grey dash-dot car line off the
-Hotel hub, but excluded from the day filter. (Houston/Austin are off-map.)
+Hotel `[car]` → Airport. `travel: true`, but still shown in the day filter.
 
 ### recurring transfer hubs
 
-- **Hotel** (34th/36th St) — days 1, 2, 3, 4 → the central hub
-- **Rockefeller Center** — days 1, 2
-- **Nintendo Store** — days 1, 2
-- **Oculus** — days 2, 4
+- **Hotel** (34th/36th St) — days 1–5, the central hub.
+- **Oculus** — days 2, 4.
+- **Nintendo Store** — days 1, 2.
 
-### geography notes (confirmed)
+(Rockefeller Center is Day 1 only after the data rework.)
 
-- **Pizza Suprema** → near Penn Station / MSG / the Hotel (8th Ave & ~30th).
-  Placed there even though it's last on Day 4's list.
-- **Cloudflare Office** → at the **World Trade Center** (sits with the WTC/Oculus cluster).
-- **368 Broadway** → **SoHo**.
-- **Friends Apartment** → skipped, omitted from the map.
-- **Pier 79** is far west midtown (the ferry up the Hudson lands there).
+### geography notes
+
+- **NY Pizza Suprema** → near Penn Station / MSG (8th Ave & ~30th).
+- **World Trade Center** = the Cloudflare office (WTC/Oculus cluster).
+- **368 Broadway** → SoHo. **Burgerology** → next to the hotel on 36th.
+- **Liberty Bagels** → near the hotel (Day 3 breakfast).
 
 ---
 
 ## 4. day colors (MTA palette)
 
-Official MTA trunk-line colors, sourced from the MTA brand colors doc
-([mta.info/document/168976](https://www.mta.info/document/168976)), defined as
-**Tailwind theme variables** in `src/styles/tailwind.css` (`@theme`). Use the
-generated utilities (`bg-mta-red`, `text-mta-blue`, …) and CSS vars
-(`var(--color-mta-red)`) instead of hardcoding hex.
+Day colors follow the trip's most-to-least-used subway lines: **blue → yellow →
+orange → red → brown**.
 
-| day | theme                       | tailwind token       | hex       | nod to         |
-| --- | --------------------------- | -------------------- | --------- | -------------- |
-| 1   | Midtown / Times Square      | `--color-mta-red`    | `#EE352E` | 1·2·3 red      |
-| 2   | Downtown + Brooklyn         | `--color-mta-blue`   | `#0039A6` | A·C·**E** blue |
-| 3   | Central Park + Midtown/SoHo | `--color-mta-green`  | `#00933C` | 4·5·6 green    |
-| 4   | West Side + Chinatown       | `--color-mta-orange` | `#FF6319` | B·D·F·M orange |
-| 5   | departure (travel)          | `--color-mta-grey`   | `#A7A9AC` | grey, car      |
+| day | theme                         | token                | hex       |
+| --- | ----------------------------- | -------------------- | --------- |
+| 1   | Midtown & Times Square        | `--color-mta-blue`   | `#0062cf` |
+| 2   | Downtown & Brooklyn           | `--color-mta-yellow` | `#f6bc26` |
+| 3   | Central Park & Midtown & SoHo | `--color-mta-orange` | `#eb6800` |
+| 4   | West Side & Chinatown         | `--color-mta-red`    | `#d82233` |
+| 5   | Departure                     | `--color-mta-brown`  | `#8e5c33` |
 
-The full palette (yellow, light-green, brown, purple, shuttle, teal) is also
-defined for the optional subway-lines layer.
-
-- **Background:** warm off-white/cream — `--color-mta-paper` (`#F5F3EC`).
-- **Type:** **Helvetica** (`--font-helvetica`: `Helvetica, "Helvetica Neue", Arial, sans-serif`).
+- The **full MTA palette** (blue, orange, light-green, brown, grey, yellow, red,
+  green, purple, teal) plus surface tokens (`--color-mta-paper` `#ffffff`,
+  `--color-mta-water` `#bed0e0`, `--color-mta-park` `#f0f4d0`) are defined in
+  `src/styles/tailwind.css`.
+- **Important Tailwind v4 note:** these color tokens live in a plain **`:root`
+  block, not `@theme`.** Tailwind v4 tree-shakes unused `@theme` variables, and
+  because we reference colors dynamically (`var(--color-mta-${x})` in
+  `subwayLineColor`) the "unused" ones (e.g. brown / J) were being dropped,
+  leaving bullets transparent. `:root` always emits them. Only
+  `--font-helvetica` stays in `@theme` (it backs the `font-helvetica` utility).
+  We consume colors as raw `var(--color-mta-*)` in inline styles / data — never
+  as `bg-mta-*` utilities.
+- **Contrast:** `textColorOn(color)` returns dark text for light fills (the yellow
+  day) so the active filter pill / day badges use black-on-yellow like the real
+  MTA. (Theme-subtitle contrast was intentionally left as-is.)
+- **Type:** Helvetica (`--font-helvetica`).
 
 ---
 
 ## 5. data model
 
-Types live in `src/data/types.ts`; the data is split across `src/data/stops.ts`,
+Types live in `src/data/types.ts`; data is split across `src/data/stops.ts`,
 `src/data/days.ts`, and `src/data/trip.ts` (which composes them).
 
 ```ts
-// src/data/types.ts
 type TransitMode = "subway" | "walk" | "ferry" | "car"
 
 type Stop = {
-    id: string // "hotel", "times-square", ...
+    id: string
     name: string
-    coord: {x: number; y: number} // schematic grid position
-    days: number[] // [1,2,3,4] — which day-lines pass through
+    coord: {x: number; y: number}
+    days: number[] // which day-lines pass through (must match the routes)
     notes?: string
-    subwayLines?: string[] // ["E"], ["N","Q","R","W"], ...
-    photos?: string[] // "/images/<id>/01.jpg" (placeholders for now)
+    subwayLines?: string[] // the line(s) we took to GET to this stop (panel only)
+    photos?: string[] // Cloudflare Images custom IDs, e.g. ["macys/1"]
+    labelSide?: "left" | "right"
 }
 
-type Segment = {
-    mode: TransitMode // drives the line style (see MODE_DASH)
-    line?: string // "E" when mode === "subway"
-}
+type Segment = {mode: TransitMode} // line style is driven by mode (no `line` field)
 
 type Day = {
     id: number
-    date: string // "Tue, Jun 16"
+    date: string
     theme: string
-    color: string // CSS var, e.g. "var(--color-mta-red)"
+    color: string // CSS var, e.g. "var(--color-mta-blue)"
     route: string[] // ordered Stop ids
-    segments: Segment[] // route.length - 1 entries, mode between stops
-    travel?: boolean // travel-only day (Day 5 → LGA); excluded from filter
+    segments: Segment[] // route.length - 1 entries
+    travel?: boolean // Day 5; still shown in the filter
 }
 
 type Trip = {days: Day[]; stops: Record<string, Stop>}
 ```
 
-- Stops live in a keyed map so hubs are defined once and referenced by every day.
-- Each `Day.route` is an ordered list of stop ids; `segments[i]` is the
-  transit mode used between `route[i]` and `route[i+1]`.
-- **Line style is driven by `mode`** (`MODE_DASH` in `src/utils/trip.ts`):
-  walk = dotted, subway = solid, ferry = dashed, car = dash-dot.
-- **Arrival** is the leading `car` segment of **Day 1** (Lincoln Tunnel → Hotel);
-  **departure** is **Day 5** (`travel: true`, Hotel → LGA, `car`). Both render
-  dash-dot via the car style. `filterableDays()` (in `src/utils/trip.ts`) hides
-  travel-only days from the toggle.
-- **Notes** use lorem-ipsum placeholder text to be replaced later.
+- Stops live in a keyed map so shared stops are defined once and referenced by
+  each day. A stop's `days` must equal the set of days whose `route` includes it
+  (enforced by `src/data/trip.test.ts`).
+- `segments[i]` is the mode between `route[i]` and `route[i+1]`. Line style comes
+  from `MODE_DASH` (`src/utils/trip.ts`): walk dotted, subway solid, ferry dashed,
+  car dash-dot.
+- `subwayLines` is "the line(s) we rode to reach this stop," rendered as MTA
+  bullets in the detail panel only (color = day on the map; line identity lives in
+  the panel). Stops we walked to have none.
+- Notes are real (no placeholders). 3 stops have no photos by choice: hotel,
+  the-cage, burgerology.
 
 ---
 
-## 6. coordinate / layout strategy
+## 6. coordinate / layout
 
-- SVG `viewBox` **portrait** (Manhattan is tall), e.g. `0 0 1000 1500`, north at top.
-- Brooklyn stays **compact** in the lower-right — just enough room for the
-  Brooklyn Bridge / DUMBO cluster. We don't need to show all of Brooklyn.
-- Geographically-_rough_ placement so the map reads as NYC and shows how much
-  of the island we covered — not survey-accurate.
-    - top: Central Park / Zoo, Upper East & West Side
-    - upper-mid: Times Sq, Rockefeller, Fifth Ave, Grand Central, **Hotel hub**
-    - west (left): Hudson Yards, Vessel, High Line, Chelsea Market, Little Island,
-      Pier 79, **Lincoln Tunnel** (far-west midtown, ~42nd St — Day 1 arrival)
-    - lower-mid: Washington Sq, SoHo, 368 Broadway
-    - bottom: Chinatown (Pell/Doyers/Mott), FiDi, WTC/Oculus, Wall St/NYSE, Statue of Liberty
-    - lower-right (Brooklyn): Brooklyn Bridge, DUMBO, Jane's Carousel, Westville, Pebble Beach
-- Lines route between anchors snapped to **45° / 90°** segments (the MTA look).
-  A small helper generates an SVG path that only turns in 45° increments.
-- **Coordinates are iterative.** First pass places everything; we'll nudge after
-  seeing it render. This is expected and fine.
+- SVG `viewBox` is **`0 0 658 1269`** (portrait; north up). `MAP_WIDTH` /
+  `MAP_HEIGHT` are exported from `TripMap`.
+- Geographically-_rough_ placement so the map reads as NYC, not survey-accurate.
+- Lines route between anchors snapped to **90° / 45°** segments via the path
+  helper in `src/utils/path.ts` (`bend`, `segmentPath`, `routePath`,
+  `roundedPolygon`).
+- **Coordinates are still a first pass** — the Midtown cluster is crowded and
+  needs a tuning pass (see §15).
 
 ---
 
 ## 7. rendering
 
-- `<TripMap>` — the SVG canvas (viewBox, optional pan/zoom later).
-    - `<BaseMap>` — the **geographic base layer** (see §7a). Rendered first, under
-      everything else.
-    - `<DayLine day={...}>` — the day's colored route, 45° routing, rounded
-      caps/joins. Drawn segment-by-segment so each segment's **stroke style comes
-      from its `mode`** (`MODE_DASH`): walk dotted, subway solid, ferry dashed,
-      car dash-dot. Use round line caps so the dotted walk reads as dots.
-    - `<StopNode stop={...}>` — white bulb with colored ring. Hubs render larger
-      with multiple colored rings (one per day passing through). Food/major stops
-      get a badge.
-    - `<StopLabel>` — MTA-style label beside each dot, collision-avoided where easy.
-- Render order: **base map first**, then lines, then nodes, then labels.
-- A small **legend** also documents the four mode line styles.
-
-## 7a. base map (geographic backdrop) — _planned, tackle later_
-
-Right now the background is a plain paper rectangle, so you can't read the
-**shape of the island or the water**. We want the backdrop to vaguely resemble
-NYC: simplified **land** masses (Manhattan + a sliver of Brooklyn/NJ) over
-**water** (Hudson + East River + harbor), so the day-lines clearly sit on land
-and the ferry crosses water.
-
-- Use `references/mta-subway-map.pdf` as the visual reference for how the MTA
-  renders land vs. water (water tint, park green, coastline feel).
-- Implementation idea: a `<BaseMap>` component drawing a few hand-authored SVG
-  polygons/paths on the same 1000 × 1500 grid:
-    - water fill behind everything (e.g. a `--color-mta-water` token),
-    - Manhattan landmass + small Brooklyn/NJ wedges (`--color-mta-paper`/land),
-    - optionally Central Park as a green block and the rivers as gaps.
-- Keep it **stylized and simple** (a handful of polygons), not an accurate
-  coastline — it just needs to read as "NYC" behind the schematic.
-- Add `--color-mta-water` (and maybe `--color-mta-land`/park green) to the
-  Tailwind theme when we build this.
+- `<TripMap>` — the SVG canvas (`role="img"`, `aria-label="NYC 2026 trip map"`),
+  rounded corners, `viewBox` 658×1269.
+    - `<BaseMap>` — the geographic backdrop: octilinear land / water / park
+      polygons (`roundedPolygon`). Rendered first, under everything. **Done.**
+    - `<DayLine>` — the day's colored route, octilinear, rounded caps/joins.
+      Per-segment `stroke-dasharray` from `MODE_DASH`; round caps so dotted walk
+      reads as dots. Dimmed when another day is filtered.
+    - `<StopNode>` — white bulb with a colored ring (day color). Uniform size;
+      pops to 1.4× on hover/focus (and when its day-card row is hovered/focused).
+    - `<StopLabel>` — the stop name beside the dot, hidden until the stop group is
+      hovered/focused (or driven from the matching day card). White halo for
+      legibility.
+- Render order: base map → day lines → stop groups (dot + label). Stop groups are
+  rendered in **visit order** (`visitOrderedStops`) so keyboard tab order follows
+  the trip.
+- `<Legend>` documents the four mode line styles, ordered walk · car · ferry ·
+  subway.
+- **Known issue:** dots/labels are painted in document order, so an overlapping
+  dot or its label can be clipped behind a later-drawn neighbor (Midtown). Needs a
+  stacking fix — see §15.
 
 ---
 
 ## 8. interaction
 
-- **Day filter** (primary UI): `All Days` · `Day 1` · `Day 2` · `Day 3` · `Day 4`.
-    - Selecting a day highlights its line + stops at full opacity and dims others.
-    - `All Days` shows everything.
-- **Stop panel** (detail): click/tap a stop → responsive panel.
-    - desktop: right-side drawer; mobile: bottom sheet.
-    - shows photo gallery (placeholders now), notes, subway lines used,
-      notes.
-    - keyboard-accessible: stops are focusable, `Enter`/`Space` opens, `Esc` closes.
-- **Legend**: day color + theme list; doubles as the filter on small screens.
+- **Day filter** (`<DayFilter>`): `All Days` · `Day 1`–`Day 5`. Selecting a day
+  shows its line/stops at full opacity and dims the rest; the itinerary list
+  (`<DayList>`/`<DayItinerary>`) shows only that day. Active pill fills with the
+  day color (black text on the yellow day).
+- **Stop panel** (`<StopPanel>`): click a stop (map dot or itinerary row) →
+  responsive panel — right drawer on desktop, bottom sheet on mobile. Shows the
+  photo grid (thumbnails linking to full-size in a new tab), notes, and subway-line
+  bullets. Animated in/out (always mounted), `inert`/`aria-hidden` when closed.
+- **Map ↔ itinerary linking:** hovering or focusing a day-card stop highlights the
+  matching map dot (label + pop); clicking either opens the panel.
+- **Accessibility:** stops are focusable (`role="button"`, Enter/Space);
+  visit-order tab sequence; while the panel is open the rest of the page is `inert`
+  and focus returns to the trigger on close; `prefers-reduced-motion` disables the
+  panel slide, dot pop, label fade, and scroll fades.
 
 ---
 
-## 9. layers (on for v1, may remove later)
+## 9. photos (Cloudflare Images)
 
-Enabled by default for v1; we may drop them if they don't earn their keep. Both
-are toggleable so turning them off is trivial:
-
-- **Food layer** — highlight just the food stops (Westville, El Mitote,
-  Pizza Suprema, Hot Dog Cart, Bubble Tea, Dumplings).
-- 🚇 **Subway-lines layer** — show which lines we used (E; B D F M; N Q R W;
-  A C; 1 2 3; Ferry) as a separate key.
-    - **Most-used lines, in order:** 🔵 blue (A·C·E) → 🟠 orange (B·D·F·M) →
-      🟡 yellow (N·Q·R·W) → 🔴 red (1·2·3). Order the legend/key this way, and
-      consider sizing/emphasis by usage.
-
----
-
-## 10. photos
-
-- Placeholders for now. Each stop reads from `/public/images/<stop-id>/`.
-- The gallery shows numbered placeholder slots + captions; drop real files in
-  later and they appear automatically.
-- README will document the folder convention.
+- Photos are hosted in **Cloudflare Images**, not in the repo. `stop.photos` holds
+  custom IDs like `"macys/1"`.
+- `createImageUrl(id, "thumb" | "full")` (`src/utils/images.ts`) builds
+  `https://imagedelivery.net/<hash>/<id>/<variant>` using
+  `import.meta.env.VITE_CLOUDFLARE_IMAGES_HASH` (public, build-time).
+- Named variants (dashboard): `thumbnail` (400×400, cover) for the grid, `full`
+  (2000×2000, scale-down) for the open-in-new-tab view.
+- **Upload flow:** drop JPGs into gitignored `photos/<stop-id>/`, run
+  `npm run photos` (`scripts/upload-photos.ts`). It uploads with custom IDs
+  `<stop-id>/<n>` (p-limit concurrency, upload-first / delete-on-conflict, so it's
+  idempotent) and writes the IDs into `stops.ts`. Needs `CLOUDFLARE_ACCOUNT_ID` +
+  an Images:Edit `CLOUDFLARE_IMAGES_TOKEN` in `.env`.
+- **Cold loads:** the first request for a variant is generated/encoded on the fly
+  (~1.3s) then edge-cached ~48h per pop; it re-encodes on a cache miss. Mitigations
+  discussed in §15.
 
 ---
 
-## 11. proposed file structure
+## 10. deployment
+
+- **Cloudflare Workers Builds** (git integration), Worker name `nyc-2026`.
+    - Build command: `npm run build`. Deploy command: `npx wrangler deploy`.
+    - Auto-deploys on push to `main`; other branches create preview versions.
+- **Build variable** `VITE_CLOUDFLARE_IMAGES_HASH` must be set in the Workers
+  Builds build config (build-time, separate from runtime vars) or images break.
+  The runtime Worker needs no secrets.
+- Custom domain: **nyc.bradgarropy.com**.
+
+---
+
+## 11. file structure
 
 ```
 src/
-  routes/
-    index.tsx            # renders <TripMap/> + <Legend/> + <DayFilter/>
+  routes/index.tsx        # the page: map + filter + legend + itinerary + panel
   components/
-    TripMap/             # SVG canvas
-    BaseMap/             # geographic backdrop (land + water), planned
-    DayLine/
-    StopNode/
-    StopLabel/
-    DayFilter/
-    Legend/
-    StopPanel/           # detail drawer / bottom sheet
+    TripMap/ BaseMap/ DayLine/ StopNode/ StopLabel/
+    DayFilter/ Legend/ DayList/ DayItinerary/ StopPanel/
+    Header/ Footer/ ErrorBoundary/
   data/
-    types.ts             # shared types (Stop, Segment, Day, Trip)
-    stops.ts             # the stops map (coords, days, notes, ...)
-    days.ts              # the day routes + segments
-    trip.ts              # composes stops + days into Trip
+    types.ts stops.ts days.ts trip.ts
+    trip.test.ts          # data-integrity checks
   utils/
-    trip.ts              # filterableDays(), MODE_DASH
-    path.ts              # 45° SVG path helper
-  styles/
-    tailwind.css
-public/
-  images/<stop-id>/...   # photos (placeholders for now)
+    trip.ts               # MODE_DASH, subwayLineColor, textColorOn, visitOrderedStops
+    images.ts             # createImageUrl + variant config
+    path.ts               # octilinear SVG path helpers
+    errors.ts
+  styles/tailwind.css     # MTA color tokens (:root) + font (@theme) + scroll fades
+  e2e/                    # Playwright: home.spec.ts, flows.spec.ts
+scripts/upload-photos.ts  # Cloudflare Images uploader (npm run photos)
+photos/<stop-id>/         # gitignored local photo sources
 ```
 
-(Components follow the starter convention: `Name/Name.tsx` + `index.tsx` +
-`Name.test.tsx`.)
+Components follow `Name/{Name.tsx, index.tsx, Name.test.tsx}`.
 
 ---
 
-## 12. build phases
+## 12. status
 
-1. **Data** — author `src/data/{types,stops,days,trip}.ts`: every stop with
-   first-pass coords, days, categories, hubs, placeholder photo paths.
-   _(done)_
-2. **Static map** — `<TripMap>` + `<DayLine>` + `<StopNode>` + `<StopLabel>`
-   rendering all days at once. Nail the 45° path helper. _(lines done; stops +
-   labels next)_
-3. **Base map** — `<BaseMap>` geographic backdrop (land + water) so the island
-   shape reads behind the schematic (see §7a).
-4. **Coordinate pass** — render, screenshot, nudge coordinates until it reads
-   like NYC and looks clean.
-5. **Day filter** — highlight/dim by day; `All Days` default.
-6. **Stop panel** — clickable stops → responsive drawer/bottom-sheet with
-   gallery, notes, lines.
-7. **MTA polish** — title block, legend, fonts, colors, shadows; the Day 5
-   dotted departure tail.
-8. **A11y + responsive** — keyboard nav, focus states, mobile bottom sheet.
-9. **Photos + README** — wire `/public/images/<stop-id>/`, document swapping in
-   real photos.
-10. **Tests** — unit (data integrity, path helper, components) + a couple of
-    Playwright flows (filter a day, open a stop).
+Done: data + real notes + subway lines · octilinear map + base map · day filter ·
+animated/responsive stop panel · Cloudflare Images photos · day recolor +
+black-on-yellow · title block + legend + `&` themes + favicon · clickable
+itinerary + map↔card hover · starter cleanup + README · deploy (Workers Builds +
+custom domain) · accessibility pass (focus trap/return, reduced motion, visit-order
+tab) · tests (72 unit incl. data-integrity, + e2e flows).
+
+Remaining: see §15.
 
 ---
 
 ## 13. title block
 
-- Big title: **NYC 2026**
-- Subtext: the date range — **June 16–20, 2026**
+- Header: **New York City 2026** + subtitle **JUNE 16–20, 2026** (uppercase tag).
+- Document `<title>` is plain **`nyc 2026`**; the 🗽 lives in the favicon
+  (`https://fav.farm/🗽`).
+
+---
 
 ## 14. decisions locked in
 
-- **Portrait** canvas, north up; Brooklyn kept compact (no need to show all of it).
-- Trip is **5 days / 4 nights**: the **Lincoln Tunnel arrival is the start of
-  Day 1**; **Day 5** is the LGA departure (`travel: true`, excluded from filter).
-- **Transit mode drives line style**: walk dotted, subway solid, ferry dashed,
-  car dash-dot (car = arrival + departure drives).
-- Recurring stops = transfer hubs (single node, multiple colored lines).
-- Pizza Suprema → Penn/MSG/Hotel area; Cloudflare Office → WTC; 368 Broadway → SoHo;
-  Friends Apartment skipped.
-- Day filter is the primary control; **food + subway-lines layers on for v1**
-  (toggleable, may remove later).
-- Geographically-rough schematic with 45° MTA-style routing.
-- **v1 is a static, fit-to-screen poster** (clickable stops); not deployed yet
-  (**local-only** for this pass).
-- Notes use lorem ipsum placeholders.
+- **Color = day**, full stop. Subway line identity appears **only in the detail
+  panel** (real MTA-colored bullets), never as a second color system on the map.
+- **Shared stops are single map nodes** (transfer hubs), with one content set per
+  place (we considered per-visit photos/notes and decided against it).
+- Transit mode drives line **style** (dash pattern), not color.
+- MTA color tokens live in **`:root`** (Tailwind v4 tree-shaking — see §4).
+- Day 5 is `travel: true` but **is shown** in the filter.
+- No decorative emoji in the UI; the 🗽 is favicon-only.
+- Photos in **Cloudflare Images**, referenced by custom ID; sources gitignored.
 
 ---
 
-## 15. future enhancements (not v1)
+## 15. remaining / future work
 
-- **Pan / zoom** — drag to pan, scroll/pinch to zoom (helps on dense mobile view).
-- **Draw-on animation** — each day's line animates drawing itself on load / when
-  selected in the filter.
-- **Cloudflare deploy** — publish to `nyc-2026.workers.dev` for a shareable link.
+In rough priority:
 
----
+1. **Coordinate & line-routing tuning** — the Midtown cluster is crowded and
+   overlapping; nudge coordinates + routing until it reads cleanly. Biggest
+   remaining visual win.
+2. **SVG dot stacking & label readability** — overlapping dots and their labels can
+   be clipped behind later-drawn neighbors, and label text is sometimes hard to
+   read. Need a way to control stacking (e.g. raise the hovered/active stop and its
+   label above siblings, and/or strengthen the label halo / collision handling).
+3. **Cold-load image cache (in planning)** — first load of a variant is ~1.3s
+   (cold transform), re-encoded on cache miss (~48h TTL, per pop). Plan: serve
+   images from our own zone (`/cdn-cgi/imagedelivery/...`, since Cache Rules don't
+   apply to `imagedelivery.net`) + a Cache Rule with a long Edge TTL to reduce
+   miss frequency. Caveat: reduces frequency, not the first-hit cost.
+4. **Downscale originals to ~2000px** — the only durable fix for the cold-encode
+   cost (encode time scales with source pixels); declined so far for simplicity.
+5. **Future enhancements** — pan/zoom on the map; a line draw-on animation.
 
-## 16. references
-
-Official MTA source material (committed locally in `references/` for safekeeping):
-
-- **Subway map** (visual style reference) —
-  [mta.info/map/5256](https://www.mta.info/map/5256) → `references/mta-subway-map.pdf`
-- **Brand colors** (line hex values) —
-  [mta.info/document/168976](https://www.mta.info/document/168976) → `references/mta-brand-colors.pdf`
+Mobile is knowingly cramped (small map dots, hover-only labels) and is not a
+priority — the itinerary cards are the primary mobile interaction.
