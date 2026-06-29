@@ -57,3 +57,22 @@ test("uses the day color and mode-driven dash styles", () => {
     expect(paths[0]).toHaveAttribute("stroke-dasharray", "1 10") // walk = dotted
     expect(paths[1]).not.toHaveAttribute("stroke-dasharray") // subway = solid
 })
+
+test("routes a segment through optional waypoints", () => {
+    const waypointDay: Day = {
+        ...day,
+        segments: [{mode: "ferry", via: [{x: 10, y: 0}]}],
+        route: ["a", "c"],
+    }
+
+    const {container} = render(
+        <svg>
+            <DayLine day={waypointDay} stops={stops} />
+        </svg>,
+    )
+
+    expect(container.querySelector("path")).toHaveAttribute(
+        "d",
+        "M 0 0 L 10 0 L 20 0",
+    )
+})

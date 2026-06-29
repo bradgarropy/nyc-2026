@@ -1,5 +1,5 @@
 import type {Day, Stop} from "~/data/types"
-import {segmentPath} from "~/utils/path"
+import {routePath, segmentPath} from "~/utils/path"
 import {MODE_DASH} from "~/utils/trip"
 
 type DayLineProps = {
@@ -32,7 +32,15 @@ const DayLine = ({
                 return (
                     <path
                         key={`${from.id}-${to.id}-${index}`}
-                        d={segmentPath(from.coord, to.coord)}
+                        d={
+                            segment.via
+                                ? routePath([
+                                      from.coord,
+                                      ...segment.via,
+                                      to.coord,
+                                  ])
+                                : segmentPath(from.coord, to.coord)
+                        }
                         fill="none"
                         stroke={day.color}
                         strokeWidth={strokeWidth}

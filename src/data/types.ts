@@ -23,6 +23,9 @@ export type Segment = {
     // The line style is driven by the mode (walk / subway / ferry / car each
     // render with a distinct stroke — see src/utils/trip.ts `MODE_DASH`).
     mode: TransitMode
+    // Optional schematic waypoints for segments that need to avoid land or run
+    // beside another line instead of taking the automatic single-bend route.
+    via?: Array<{x: number; y: number}>
 }
 
 export type Day = {

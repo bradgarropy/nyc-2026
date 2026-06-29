@@ -66,8 +66,18 @@ export const days: Day[] = [
             {mode: "walk"},
             {mode: "walk"},
             {mode: "walk"},
-            {mode: "ferry"},
-            {mode: "ferry"},
+            {
+                mode: "ferry",
+                via: [
+                    {x: 414, y: 786},
+                    {x: 414, y: 816},
+                    {x: 272, y: 960},
+                ],
+            },
+            {
+                mode: "ferry",
+                via: [{x: 28, y: 870}],
+            },
             {mode: "walk"},
             {mode: "walk"},
             {mode: "walk"},
@@ -97,7 +107,13 @@ export const days: Day[] = [
             {mode: "subway"},
             {mode: "walk"},
             {mode: "walk"},
-            {mode: "subway"},
+            {
+                mode: "subway",
+                via: [
+                    {x: 122, y: 448},
+                    {x: 122, y: 485},
+                ],
+            },
             {mode: "subway"},
             {mode: "walk"},
             {mode: "subway"},
