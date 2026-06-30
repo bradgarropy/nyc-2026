@@ -247,6 +247,20 @@ export const stops: Record<string, Stop> = {
         coord: {x: 274, y: 800},
         days: [3],
         notes: "We caught a quick glimpse of Casey Neistat riding away on his boosted board!",
+        links: [
+            {
+                label: "The Biggest Parade in New York City History",
+                url: "https://youtu.be/hqxUqRfceEQ",
+            },
+            {
+                label: "This Robot Changed How I Vlog",
+                url: "https://youtu.be/YxJIHbHXVrs",
+            },
+            {
+                label: "Jennifer Lopez said I Am Not a New Yorker",
+                url: "https://youtu.be/XJBm88g-e8Q",
+            },
+        ],
         subwayLines: ["E"],
         photos: ["368-broadway/1", "368-broadway/2", "368-broadway/3"],
     },

@@ -12,6 +12,10 @@ export type Stop = {
     coord: {x: number; y: number}
     days: number[]
     notes?: string
+    links?: Array<{
+        label: string
+        url: string
+    }>
     subwayLines?: string[]
     // Cloudflare Images custom IDs (e.g. "macys/1"), in display order. The
     // delivery URL is built by `createImageUrl` (see src/utils/images.ts).

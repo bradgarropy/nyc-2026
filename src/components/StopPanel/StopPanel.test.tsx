@@ -66,6 +66,28 @@ test("renders photo thumbnails that link to the full size in a new tab", () => {
     vi.unstubAllEnvs()
 })
 
+test("renders external links in a new tab", () => {
+    render(
+        <StopPanel
+            stop={{
+                ...stop,
+                links: [
+                    {
+                        label: "Casey Neistat video",
+                        url: "https://youtu.be/hqxUqRfceEQ",
+                    },
+                ],
+            }}
+            dayColors={dayColors}
+            onClose={() => {}}
+        />,
+    )
+
+    const link = screen.getByRole("link", {name: "Casey Neistat video"})
+    expect(link).toHaveAttribute("href", "https://youtu.be/hqxUqRfceEQ")
+    expect(link).toHaveAttribute("target", "_blank")
+})
+
 test("closes via the close button", async () => {
     const onClose = vi.fn()
     const user = userEvent.setup()

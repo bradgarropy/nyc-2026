@@ -212,6 +212,43 @@ const StopPanel = ({stop, dayColors, onClose}: StopPanelProps) => {
                                 </p>
                             ) : null}
 
+                            {content.links?.length ? (
+                                <div className="mt-5">
+                                    <h3 className="text-xs font-semibold tracking-wide text-gray-400 uppercase">
+                                        Links
+                                    </h3>
+                                    <div className="mt-2 flex flex-col gap-2">
+                                        {content.links.map(link => (
+                                            <a
+                                                key={link.url}
+                                                href={link.url}
+                                                target="_blank"
+                                                rel="noreferrer"
+                                                className="inline-flex items-center justify-between gap-3 rounded-lg border border-gray-200 px-3 py-2 text-sm font-semibold text-[#1a1a1a] hover:bg-gray-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-400"
+                                            >
+                                                <span>{link.label}</span>
+                                                <svg
+                                                    width="16"
+                                                    height="16"
+                                                    viewBox="0 0 20 20"
+                                                    aria-hidden="true"
+                                                    className="shrink-0 text-gray-400"
+                                                >
+                                                    <path
+                                                        d="M7 5h8v8M15 5l-9 9"
+                                                        fill="none"
+                                                        stroke="currentColor"
+                                                        strokeWidth="2"
+                                                        strokeLinecap="round"
+                                                        strokeLinejoin="round"
+                                                    />
+                                                </svg>
+                                            </a>
+                                        ))}
+                                    </div>
+                                </div>
+                            ) : null}
+
                             {content.subwayLines?.length ? (
                                 <div className="mt-5">
                                     <h3 className="text-xs font-semibold tracking-wide text-gray-400 uppercase">

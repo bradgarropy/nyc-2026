@@ -1,10 +1,12 @@
-import {isRouteErrorResponse, useRouteError} from "react-router"
+import {isRouteErrorResponse} from "react-router"
 
 import {createErrorStack} from "~/utils/errors"
 
-const ErrorBoundary = () => {
-    const error = useRouteError()
+type ErrorBoundaryProps = {
+    error: unknown
+}
 
+const ErrorBoundary = ({error}: ErrorBoundaryProps) => {
     if (isRouteErrorResponse(error)) {
         return (
             <div className="w-screen h-screen grid place-content-center p-16">

@@ -1,16 +1,14 @@
 import {render, screen} from "@testing-library/react"
 import type {ErrorResponse} from "react-router"
-import {isRouteErrorResponse, useRouteError} from "react-router"
+import {isRouteErrorResponse} from "react-router"
 import {expect, test, vitest} from "vitest"
 
 import ErrorBoundary from "~/components/ErrorBoundary"
 
 vitest.mock("react-router", () => ({
-    useRouteError: vitest.fn(),
     isRouteErrorResponse: vitest.fn(),
 }))
 
-const useRouteErrorMock = vitest.mocked(useRouteError)
 const isRouteErrorResponseMock = vitest.mocked(isRouteErrorResponse)
 
 test("shows route error", () => {
@@ -20,10 +18,9 @@ test("shows route error", () => {
         data: "Something went wrong",
     }
 
-    useRouteErrorMock.mockReturnValue(mockErrorResponse)
     isRouteErrorResponseMock.mockReturnValue(true)
 
-    render(<ErrorBoundary />)
+    render(<ErrorBoundary error={mockErrorResponse} />)
 
     expect(screen.getByText("500 Internal server error")).toBeInTheDocument()
     expect(screen.getByText("Something went wrong")).toBeInTheDocument()
@@ -32,20 +29,18 @@ test("shows route error", () => {
 test("shows javascript error", () => {
     const mockError = new Error("Something went wrong", {cause: "Unknown"})
 
-    useRouteErrorMock.mockReturnValue(mockError)
     isRouteErrorResponseMock.mockReturnValue(false)
 
-    render(<ErrorBoundary />)
+    render(<ErrorBoundary error={mockError} />)
 
     expect(screen.getByText("Error: Something went wrong")).toBeInTheDocument()
     expect(screen.getByText("at file://", {exact: false})).toBeInTheDocument()
 })
 
 test("shows unknown error", () => {
-    useRouteErrorMock.mockReturnValue("Something went wrong")
     isRouteErrorResponseMock.mockReturnValue(false)
 
-    render(<ErrorBoundary />)
+    render(<ErrorBoundary error="Something went wrong" />)
 
     expect(screen.getByText("Unknown error")).toBeInTheDocument()
 })
